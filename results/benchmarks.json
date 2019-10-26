@@ -1,0 +1,355 @@
+{
+    "arrayset_sample_reads.peakmem_read_float32_30000_samples_hdf5_00_default": {
+        "code": "def peakmem_read_float32_30000_samples_hdf5_00_default():\n    aset = co.arraysets['aset_float']\n    with aset as cm_aset:\n        for i in range(30_000):\n            arr = cm_aset[i]\n\ndef repo_co_setup_30000_samples_hdf5_00_default():\n    global co\n    tmpdir_hdf5_00 = getcwd()\n    repo_hdf5_00 = Repository(tmpdir_hdf5_00, exists=True)\n    co = repo_hdf5_00.checkout(write=False)\n\ndef repo_co_setup_cache_30000_samples_hdf5_00_default():\n    tmpdir_hdf5_00 = getcwd()\n    repo_hdf5_00 = Repository(path=tmpdir_hdf5_00, exists=False)\n    repo_hdf5_00.init(user_name='tester', user_email='foo@test.bar', remove_old=True)\n    co = repo_hdf5_00.checkout(write=True)\n    aint = np.hamming(100).reshape(100, 1)\n    bint = np.hamming(100).reshape(1, 100)\n    arrint = np.round(aint * bint * 1000).astype(np.uint32)\n    afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n    bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n    arrfloat = afloat * bfloat\n    try:\n        aset_int = co.arraysets.init_arrayset('aset_int', prototype=arrint, backend_opts='00')\n        aset_float = co.arraysets.init_arrayset('aset_float', prototype=arrfloat, backend_opts='00')\n    except TypeError:\n        aset_int = co.arraysets.init_arrayset('aset_int', prototype=arrint, backend='00')\n        aset_float = co.arraysets.init_arrayset('aset_float', prototype=arrfloat, backend='00')\n    with aset_int as cm_aset_int, aset_float as cm_aset_float:\n        for i in range(30_000):\n            arrfloat += 1\n            arrint += 1\n            cm_aset_float[i] = arrfloat\n            cm_aset_int[i] = arrint\n    co.commit('first commit')\n    co.close()",
+        "name": "arrayset_sample_reads.peakmem_read_float32_30000_samples_hdf5_00_default",
+        "param_names": [],
+        "params": [],
+        "setup_cache_key": "/Users/rick/projects/tensorwerk/hangar/hangar-benchmarks/benchmarks/arrayset_sample_reads.py:13",
+        "timeout": 60.0,
+        "type": "peakmemory",
+        "unit": "bytes",
+        "version": "f073dd2fd05fab0542f73633d6562c844b3d44abd9ffb0031c11e3c42b376ba7"
+    },
+    "arrayset_sample_reads.peakmem_read_float32_30000_samples_numpy_10_default": {
+        "code": "def peakmem_read_float32_30000_samples_numpy_10_default():\n    aset = co.arraysets['aset_float']\n    with aset as cm_aset:\n        for i in range(30_000):\n            arr = cm_aset[i]\n\ndef repo_co_setup_30000_samples_numpy_10_default():\n    global co\n    tmpdir_np_10 = getcwd()\n    repo_np_10 = Repository(tmpdir_np_10, exists=True)\n    co = repo_np_10.checkout(write=False)\n\ndef repo_co_setup_cache_30000_samples_numpy_10_default():\n    tmpdir_np_10 = getcwd()\n    repo_np_10 = Repository(path=tmpdir_np_10, exists=False)\n    repo_np_10.init(user_name='tester', user_email='foo@test.bar', remove_old=True)\n    co = repo_np_10.checkout(write=True)\n    aint = np.hamming(100).reshape(100, 1)\n    bint = np.hamming(100).reshape(1, 100)\n    arrint = np.round(aint * bint * 1000).astype(np.uint32)\n    afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n    bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n    arrfloat = afloat * bfloat\n    try:\n        aset_int = co.arraysets.init_arrayset('aset_int', prototype=arrint, backend_opts='10')\n        aset_float = co.arraysets.init_arrayset('aset_float', prototype=arrfloat, backend_opts='10')\n    except TypeError:\n        aset_int = co.arraysets.init_arrayset('aset_int', prototype=arrint, backend='10')\n        aset_float = co.arraysets.init_arrayset('aset_float', prototype=arrfloat, backend='10')\n    with aset_int as cm_aset_int, aset_float as cm_aset_float:\n        for i in range(30_000):\n            arrfloat += 1\n            arrint += 1\n            cm_aset_float[i] = arrfloat\n            cm_aset_int[i] = arrint\n    co.commit('first commit')\n    co.close()",
+        "name": "arrayset_sample_reads.peakmem_read_float32_30000_samples_numpy_10_default",
+        "param_names": [],
+        "params": [],
+        "setup_cache_key": "/Users/rick/projects/tensorwerk/hangar/hangar-benchmarks/benchmarks/arrayset_sample_reads.py:40",
+        "timeout": 60.0,
+        "type": "peakmemory",
+        "unit": "bytes",
+        "version": "894ab971df97f094347a97fe6c911646491a76d42f42cc36a70c1f480d94d0f5"
+    },
+    "arrayset_sample_reads.peakmem_read_uint32_30000_samples_hdf5_00_default": {
+        "code": "def peakmem_read_uint32_30000_samples_hdf5_00_default():\n    aset = co.arraysets['aset_int']\n    with aset as cm_aset:\n        for i in range(30_000):\n            arr = cm_aset[i]\n\ndef repo_co_setup_30000_samples_hdf5_00_default():\n    global co\n    tmpdir_hdf5_00 = getcwd()\n    repo_hdf5_00 = Repository(tmpdir_hdf5_00, exists=True)\n    co = repo_hdf5_00.checkout(write=False)\n\ndef repo_co_setup_cache_30000_samples_hdf5_00_default():\n    tmpdir_hdf5_00 = getcwd()\n    repo_hdf5_00 = Repository(path=tmpdir_hdf5_00, exists=False)\n    repo_hdf5_00.init(user_name='tester', user_email='foo@test.bar', remove_old=True)\n    co = repo_hdf5_00.checkout(write=True)\n    aint = np.hamming(100).reshape(100, 1)\n    bint = np.hamming(100).reshape(1, 100)\n    arrint = np.round(aint * bint * 1000).astype(np.uint32)\n    afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n    bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n    arrfloat = afloat * bfloat\n    try:\n        aset_int = co.arraysets.init_arrayset('aset_int', prototype=arrint, backend_opts='00')\n        aset_float = co.arraysets.init_arrayset('aset_float', prototype=arrfloat, backend_opts='00')\n    except TypeError:\n        aset_int = co.arraysets.init_arrayset('aset_int', prototype=arrint, backend='00')\n        aset_float = co.arraysets.init_arrayset('aset_float', prototype=arrfloat, backend='00')\n    with aset_int as cm_aset_int, aset_float as cm_aset_float:\n        for i in range(30_000):\n            arrfloat += 1\n            arrint += 1\n            cm_aset_float[i] = arrfloat\n            cm_aset_int[i] = arrint\n    co.commit('first commit')\n    co.close()",
+        "name": "arrayset_sample_reads.peakmem_read_uint32_30000_samples_hdf5_00_default",
+        "param_names": [],
+        "params": [],
+        "setup_cache_key": "/Users/rick/projects/tensorwerk/hangar/hangar-benchmarks/benchmarks/arrayset_sample_reads.py:13",
+        "timeout": 60.0,
+        "type": "peakmemory",
+        "unit": "bytes",
+        "version": "adddf2faba20ab2fb7cbb3da816b71f1edc6f76752690b43a34aac8c3253f38b"
+    },
+    "arrayset_sample_reads.peakmem_read_uint32_30000_samples_numpy_10_default": {
+        "code": "def peakmem_read_uint32_30000_samples_numpy_10_default():\n    aset = co.arraysets['aset_int']\n    with aset as cm_aset:\n        for i in range(30_000):\n            arr = cm_aset[i]\n\ndef repo_co_setup_30000_samples_numpy_10_default():\n    global co\n    tmpdir_np_10 = getcwd()\n    repo_np_10 = Repository(tmpdir_np_10, exists=True)\n    co = repo_np_10.checkout(write=False)\n\ndef repo_co_setup_cache_30000_samples_numpy_10_default():\n    tmpdir_np_10 = getcwd()\n    repo_np_10 = Repository(path=tmpdir_np_10, exists=False)\n    repo_np_10.init(user_name='tester', user_email='foo@test.bar', remove_old=True)\n    co = repo_np_10.checkout(write=True)\n    aint = np.hamming(100).reshape(100, 1)\n    bint = np.hamming(100).reshape(1, 100)\n    arrint = np.round(aint * bint * 1000).astype(np.uint32)\n    afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n    bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n    arrfloat = afloat * bfloat\n    try:\n        aset_int = co.arraysets.init_arrayset('aset_int', prototype=arrint, backend_opts='10')\n        aset_float = co.arraysets.init_arrayset('aset_float', prototype=arrfloat, backend_opts='10')\n    except TypeError:\n        aset_int = co.arraysets.init_arrayset('aset_int', prototype=arrint, backend='10')\n        aset_float = co.arraysets.init_arrayset('aset_float', prototype=arrfloat, backend='10')\n    with aset_int as cm_aset_int, aset_float as cm_aset_float:\n        for i in range(30_000):\n            arrfloat += 1\n            arrint += 1\n            cm_aset_float[i] = arrfloat\n            cm_aset_int[i] = arrint\n    co.commit('first commit')\n    co.close()",
+        "name": "arrayset_sample_reads.peakmem_read_uint32_30000_samples_numpy_10_default",
+        "param_names": [],
+        "params": [],
+        "setup_cache_key": "/Users/rick/projects/tensorwerk/hangar/hangar-benchmarks/benchmarks/arrayset_sample_reads.py:40",
+        "timeout": 60.0,
+        "type": "peakmemory",
+        "unit": "bytes",
+        "version": "ee0f6a56bc9ccc1a7dca9c5bb30cecdcb50384bd059554b0fa08b123523de897"
+    },
+    "arrayset_sample_reads.time_read_float32_30000_samples_hdf5_00_default": {
+        "code": "def time_read_float32_30000_samples_hdf5_00_default():\n    aset = co.arraysets['aset_float']\n    with aset as cm_aset:\n        for i in range(30_000):\n            arr = cm_aset[i]\n\ndef repo_co_setup_30000_samples_hdf5_00_default():\n    global co\n    tmpdir_hdf5_00 = getcwd()\n    repo_hdf5_00 = Repository(tmpdir_hdf5_00, exists=True)\n    co = repo_hdf5_00.checkout(write=False)\n\ndef repo_co_setup_cache_30000_samples_hdf5_00_default():\n    tmpdir_hdf5_00 = getcwd()\n    repo_hdf5_00 = Repository(path=tmpdir_hdf5_00, exists=False)\n    repo_hdf5_00.init(user_name='tester', user_email='foo@test.bar', remove_old=True)\n    co = repo_hdf5_00.checkout(write=True)\n    aint = np.hamming(100).reshape(100, 1)\n    bint = np.hamming(100).reshape(1, 100)\n    arrint = np.round(aint * bint * 1000).astype(np.uint32)\n    afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n    bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n    arrfloat = afloat * bfloat\n    try:\n        aset_int = co.arraysets.init_arrayset('aset_int', prototype=arrint, backend_opts='00')\n        aset_float = co.arraysets.init_arrayset('aset_float', prototype=arrfloat, backend_opts='00')\n    except TypeError:\n        aset_int = co.arraysets.init_arrayset('aset_int', prototype=arrint, backend='00')\n        aset_float = co.arraysets.init_arrayset('aset_float', prototype=arrfloat, backend='00')\n    with aset_int as cm_aset_int, aset_float as cm_aset_float:\n        for i in range(30_000):\n            arrfloat += 1\n            arrint += 1\n            cm_aset_float[i] = arrfloat\n            cm_aset_int[i] = arrint\n    co.commit('first commit')\n    co.close()",
+        "min_run_count": 2,
+        "name": "arrayset_sample_reads.time_read_float32_30000_samples_hdf5_00_default",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 1,
+        "repeat": 1,
+        "sample_time": 0.01,
+        "setup_cache_key": "/Users/rick/projects/tensorwerk/hangar/hangar-benchmarks/benchmarks/arrayset_sample_reads.py:13",
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "6b6e0e0db04cfdf1ece7a4784b79b87d9adae2e7eee10adb75e9c809890bb3b0",
+        "warmup_time": 1e-06
+    },
+    "arrayset_sample_reads.time_read_float32_30000_samples_numpy_10_default": {
+        "code": "def time_read_float32_30000_samples_numpy_10_default():\n    aset = co.arraysets['aset_float']\n    with aset as cm_aset:\n        for i in range(30_000):\n            arr = cm_aset[i]\n\ndef repo_co_setup_30000_samples_numpy_10_default():\n    global co\n    tmpdir_np_10 = getcwd()\n    repo_np_10 = Repository(tmpdir_np_10, exists=True)\n    co = repo_np_10.checkout(write=False)\n\ndef repo_co_setup_cache_30000_samples_numpy_10_default():\n    tmpdir_np_10 = getcwd()\n    repo_np_10 = Repository(path=tmpdir_np_10, exists=False)\n    repo_np_10.init(user_name='tester', user_email='foo@test.bar', remove_old=True)\n    co = repo_np_10.checkout(write=True)\n    aint = np.hamming(100).reshape(100, 1)\n    bint = np.hamming(100).reshape(1, 100)\n    arrint = np.round(aint * bint * 1000).astype(np.uint32)\n    afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n    bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n    arrfloat = afloat * bfloat\n    try:\n        aset_int = co.arraysets.init_arrayset('aset_int', prototype=arrint, backend_opts='10')\n        aset_float = co.arraysets.init_arrayset('aset_float', prototype=arrfloat, backend_opts='10')\n    except TypeError:\n        aset_int = co.arraysets.init_arrayset('aset_int', prototype=arrint, backend='10')\n        aset_float = co.arraysets.init_arrayset('aset_float', prototype=arrfloat, backend='10')\n    with aset_int as cm_aset_int, aset_float as cm_aset_float:\n        for i in range(30_000):\n            arrfloat += 1\n            arrint += 1\n            cm_aset_float[i] = arrfloat\n            cm_aset_int[i] = arrint\n    co.commit('first commit')\n    co.close()",
+        "min_run_count": 2,
+        "name": "arrayset_sample_reads.time_read_float32_30000_samples_numpy_10_default",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 1,
+        "repeat": 1,
+        "sample_time": 0.01,
+        "setup_cache_key": "/Users/rick/projects/tensorwerk/hangar/hangar-benchmarks/benchmarks/arrayset_sample_reads.py:40",
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "e73895baf89f90acffc2cb733e7d82b8ba9ccca18faf61d2147b1391fa09d41e",
+        "warmup_time": 1e-06
+    },
+    "arrayset_sample_reads.time_read_uint32_30000_samples_hdf5_00_default": {
+        "code": "def time_read_uint32_30000_samples_hdf5_00_default():\n    aset = co.arraysets['aset_int']\n    with aset as cm_aset:\n        for i in range(30_000):\n            arr = cm_aset[i]\n\ndef repo_co_setup_30000_samples_hdf5_00_default():\n    global co\n    tmpdir_hdf5_00 = getcwd()\n    repo_hdf5_00 = Repository(tmpdir_hdf5_00, exists=True)\n    co = repo_hdf5_00.checkout(write=False)\n\ndef repo_co_setup_cache_30000_samples_hdf5_00_default():\n    tmpdir_hdf5_00 = getcwd()\n    repo_hdf5_00 = Repository(path=tmpdir_hdf5_00, exists=False)\n    repo_hdf5_00.init(user_name='tester', user_email='foo@test.bar', remove_old=True)\n    co = repo_hdf5_00.checkout(write=True)\n    aint = np.hamming(100).reshape(100, 1)\n    bint = np.hamming(100).reshape(1, 100)\n    arrint = np.round(aint * bint * 1000).astype(np.uint32)\n    afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n    bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n    arrfloat = afloat * bfloat\n    try:\n        aset_int = co.arraysets.init_arrayset('aset_int', prototype=arrint, backend_opts='00')\n        aset_float = co.arraysets.init_arrayset('aset_float', prototype=arrfloat, backend_opts='00')\n    except TypeError:\n        aset_int = co.arraysets.init_arrayset('aset_int', prototype=arrint, backend='00')\n        aset_float = co.arraysets.init_arrayset('aset_float', prototype=arrfloat, backend='00')\n    with aset_int as cm_aset_int, aset_float as cm_aset_float:\n        for i in range(30_000):\n            arrfloat += 1\n            arrint += 1\n            cm_aset_float[i] = arrfloat\n            cm_aset_int[i] = arrint\n    co.commit('first commit')\n    co.close()",
+        "min_run_count": 2,
+        "name": "arrayset_sample_reads.time_read_uint32_30000_samples_hdf5_00_default",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 1,
+        "repeat": 1,
+        "sample_time": 0.01,
+        "setup_cache_key": "/Users/rick/projects/tensorwerk/hangar/hangar-benchmarks/benchmarks/arrayset_sample_reads.py:13",
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "6b7da175a9460b39f78ef18c580acc85ddaf107cdfe19e6991dce9431087cc64",
+        "warmup_time": 1e-06
+    },
+    "arrayset_sample_reads.time_read_uint32_30000_samples_numpy_10_default": {
+        "code": "def time_read_uint32_30000_samples_numpy_10_default():\n    aset = co.arraysets['aset_int']\n    with aset as cm_aset:\n        for i in range(30_000):\n            arr = cm_aset[i]\n\ndef repo_co_setup_30000_samples_numpy_10_default():\n    global co\n    tmpdir_np_10 = getcwd()\n    repo_np_10 = Repository(tmpdir_np_10, exists=True)\n    co = repo_np_10.checkout(write=False)\n\ndef repo_co_setup_cache_30000_samples_numpy_10_default():\n    tmpdir_np_10 = getcwd()\n    repo_np_10 = Repository(path=tmpdir_np_10, exists=False)\n    repo_np_10.init(user_name='tester', user_email='foo@test.bar', remove_old=True)\n    co = repo_np_10.checkout(write=True)\n    aint = np.hamming(100).reshape(100, 1)\n    bint = np.hamming(100).reshape(1, 100)\n    arrint = np.round(aint * bint * 1000).astype(np.uint32)\n    afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n    bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n    arrfloat = afloat * bfloat\n    try:\n        aset_int = co.arraysets.init_arrayset('aset_int', prototype=arrint, backend_opts='10')\n        aset_float = co.arraysets.init_arrayset('aset_float', prototype=arrfloat, backend_opts='10')\n    except TypeError:\n        aset_int = co.arraysets.init_arrayset('aset_int', prototype=arrint, backend='10')\n        aset_float = co.arraysets.init_arrayset('aset_float', prototype=arrfloat, backend='10')\n    with aset_int as cm_aset_int, aset_float as cm_aset_float:\n        for i in range(30_000):\n            arrfloat += 1\n            arrint += 1\n            cm_aset_float[i] = arrfloat\n            cm_aset_int[i] = arrint\n    co.commit('first commit')\n    co.close()",
+        "min_run_count": 2,
+        "name": "arrayset_sample_reads.time_read_uint32_30000_samples_numpy_10_default",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 1,
+        "repeat": 1,
+        "sample_time": 0.01,
+        "setup_cache_key": "/Users/rick/projects/tensorwerk/hangar/hangar-benchmarks/benchmarks/arrayset_sample_reads.py:40",
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "f545cabde0488c7fcbcea1ae3e5c10728a64796ef79161a71e1e86b49fe2f737",
+        "warmup_time": 1e-06
+    },
+    "benchmarks.peakmem_add_float32_2D_arrays_hdf5_00_default": {
+        "code": "def peakmem_add_float32_2D_arrays_hdf5_00_default(num_samples):\n    a = np.hamming(100).reshape(100, 1).astype(np.float32)\n    b = np.hamming(100).reshape(1, 100).astype(np.float32)\n    arr = a*b\n    try:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')\n    except TypeError:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='00')\n    with aset as cm_aset:\n        for i in range(num_samples):\n            arr += 1\n            cm_aset[i] = arr\n\ndef repo_co_setup(num_samples):\n    global repo\n    global co\n    global tmpdir\n    tmpdir = mkdtemp()\n    repo = Repository(path=tmpdir, exists=False)\n    repo.init(user_name='tester', user_email='foo@test.bar', remove_old=True)\n    co = repo.checkout(write=True)",
+        "name": "benchmarks.peakmem_add_float32_2D_arrays_hdf5_00_default",
+        "param_names": [
+            "num_samples"
+        ],
+        "params": [
+            [
+                "500",
+                "10000",
+                "30000"
+            ]
+        ],
+        "timeout": 60.0,
+        "type": "peakmemory",
+        "unit": "bytes",
+        "version": "a72cbeab969232f442d4c29e9db60d7476b96df84c4f3476415a5672fea4df3a"
+    },
+    "benchmarks.peakmem_add_float32_2D_arrays_numpy_10_default": {
+        "code": "def peakmem_add_float32_2D_arrays_numpy_10_default(num_samples):\n    a = np.hamming(100).reshape(100, 1).astype(np.float32)\n    b = np.hamming(100).reshape(1, 100).astype(np.float32)\n    arr = a*b\n    try:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')\n    except TypeError:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='10')\n    with aset as cm_aset:\n        for i in range(num_samples):\n            arr += 1\n            cm_aset[i] = arr\n\ndef repo_co_setup(num_samples):\n    global repo\n    global co\n    global tmpdir\n    tmpdir = mkdtemp()\n    repo = Repository(path=tmpdir, exists=False)\n    repo.init(user_name='tester', user_email='foo@test.bar', remove_old=True)\n    co = repo.checkout(write=True)",
+        "name": "benchmarks.peakmem_add_float32_2D_arrays_numpy_10_default",
+        "param_names": [
+            "num_samples"
+        ],
+        "params": [
+            [
+                "500",
+                "10000",
+                "30000"
+            ]
+        ],
+        "timeout": 60.0,
+        "type": "peakmemory",
+        "unit": "bytes",
+        "version": "701f3cb1b3b41c9d1bb66d7ac3eec2ec80d041077d9d85b72a570918c0a99676"
+    },
+    "benchmarks.peakmem_add_uint32_2D_arrays_hdf5_00_default": {
+        "code": "def peakmem_add_uint32_2D_arrays_hdf5_00_default(num_samples):\n    a = np.hamming(100).reshape(100, 1)\n    b = np.hamming(100).reshape(1, 100)\n    arr = np.round(a*b*1000).astype(np.uint32)\n    try:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')\n    except TypeError:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='00')\n    with aset as cm_aset:\n        for i in range(num_samples):\n            arr[:] += 1\n            cm_aset[i] = arr\n\ndef repo_co_setup(num_samples):\n    global repo\n    global co\n    global tmpdir\n    tmpdir = mkdtemp()\n    repo = Repository(path=tmpdir, exists=False)\n    repo.init(user_name='tester', user_email='foo@test.bar', remove_old=True)\n    co = repo.checkout(write=True)",
+        "name": "benchmarks.peakmem_add_uint32_2D_arrays_hdf5_00_default",
+        "param_names": [
+            "num_samples"
+        ],
+        "params": [
+            [
+                "500",
+                "10000",
+                "30000"
+            ]
+        ],
+        "timeout": 60,
+        "type": "peakmemory",
+        "unit": "bytes",
+        "version": "2fec618007b949e1f030609c99936870419fdaa21268a9802c28bb7eb5ea5df3"
+    },
+    "benchmarks.peakmem_add_uint32_2D_arrays_numpy_10_default": {
+        "code": "def peakmem_add_uint32_2D_arrays_numpy_10_default(num_samples):\n    a = np.hamming(100).reshape(100, 1)\n    b = np.hamming(100).reshape(1, 100)\n    arr = np.round(a*b*1000).astype(np.uint32)\n    try:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')\n    except TypeError:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='10')\n    with aset as cm_aset:\n        for i in range(num_samples):\n            arr[:] += 1\n            cm_aset[i] = arr\n\ndef repo_co_setup(num_samples):\n    global repo\n    global co\n    global tmpdir\n    tmpdir = mkdtemp()\n    repo = Repository(path=tmpdir, exists=False)\n    repo.init(user_name='tester', user_email='foo@test.bar', remove_old=True)\n    co = repo.checkout(write=True)",
+        "name": "benchmarks.peakmem_add_uint32_2D_arrays_numpy_10_default",
+        "param_names": [
+            "num_samples"
+        ],
+        "params": [
+            [
+                "500",
+                "10000",
+                "30000"
+            ]
+        ],
+        "timeout": 60.0,
+        "type": "peakmemory",
+        "unit": "bytes",
+        "version": "638c2f1b502867e173863a4146c9c2656f4736a6b46de446ef1b3ef5b59defaf"
+    },
+    "benchmarks.time_add_float32_2D_arrays_hdf5_00_default": {
+        "code": "def time_add_float32_2D_arrays_hdf5_00_default(num_samples):\n    a = np.hamming(100).reshape(100, 1).astype(np.float32)\n    b = np.hamming(100).reshape(1, 100).astype(np.float32)\n    arr = a*b\n    try:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')\n    except TypeError:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='00')\n    with aset as cm_aset:\n        for i in range(num_samples):\n            arr += 1.0\n            cm_aset[i] = arr\n\ndef repo_co_setup(num_samples):\n    global repo\n    global co\n    global tmpdir\n    tmpdir = mkdtemp()\n    repo = Repository(path=tmpdir, exists=False)\n    repo.init(user_name='tester', user_email='foo@test.bar', remove_old=True)\n    co = repo.checkout(write=True)",
+        "min_run_count": 2,
+        "name": "benchmarks.time_add_float32_2D_arrays_hdf5_00_default",
+        "number": 1,
+        "param_names": [
+            "num_samples"
+        ],
+        "params": [
+            [
+                "500",
+                "10000",
+                "30000"
+            ]
+        ],
+        "processes": 1,
+        "repeat": 1,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "e35c7cc6f92a6449b9956ed8135644588c5a627a66abd23de8e9fe3d3c1a12ef",
+        "warmup_time": 1e-06
+    },
+    "benchmarks.time_add_float32_2D_arrays_numpy_10_default": {
+        "code": "def time_add_float32_2D_arrays_numpy_10_default(num_samples):\n    a = np.hamming(100).reshape(100, 1).astype(np.float32)\n    b = np.hamming(100).reshape(1, 100).astype(np.float32)\n    arr = a*b\n    try:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')\n    except TypeError:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='10')\n    with aset as cm_aset:\n        for i in range(num_samples):\n            arr += 1.0\n            cm_aset[i] = arr\n\ndef repo_co_setup(num_samples):\n    global repo\n    global co\n    global tmpdir\n    tmpdir = mkdtemp()\n    repo = Repository(path=tmpdir, exists=False)\n    repo.init(user_name='tester', user_email='foo@test.bar', remove_old=True)\n    co = repo.checkout(write=True)",
+        "min_run_count": 2,
+        "name": "benchmarks.time_add_float32_2D_arrays_numpy_10_default",
+        "number": 1,
+        "param_names": [
+            "num_samples"
+        ],
+        "params": [
+            [
+                "500",
+                "10000",
+                "30000"
+            ]
+        ],
+        "processes": 1,
+        "repeat": 1,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "2f01aa6702aeffc7d90414d21e7b2cfdcdc23b613523edaba452a5009a973cf6",
+        "warmup_time": 1e-06
+    },
+    "benchmarks.time_add_uint32_2D_arrays_hdf5_00_default": {
+        "code": "def time_add_uint32_2D_arrays_hdf5_00_default(num_samples):\n    a = np.hamming(100).reshape(100, 1)\n    b = np.hamming(100).reshape(1, 100)\n    arr = np.round(a*b*1000).astype(np.uint32)\n    try:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')\n    except TypeError:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='00')\n    with aset as cm_aset:\n        for i in range(num_samples):\n            arr += 1\n            cm_aset[i] = arr\n\ndef repo_co_setup(num_samples):\n    global repo\n    global co\n    global tmpdir\n    tmpdir = mkdtemp()\n    repo = Repository(path=tmpdir, exists=False)\n    repo.init(user_name='tester', user_email='foo@test.bar', remove_old=True)\n    co = repo.checkout(write=True)",
+        "min_run_count": 2,
+        "name": "benchmarks.time_add_uint32_2D_arrays_hdf5_00_default",
+        "number": 1,
+        "param_names": [
+            "num_samples"
+        ],
+        "params": [
+            [
+                "500",
+                "10000",
+                "30000"
+            ]
+        ],
+        "processes": 1,
+        "repeat": 1,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "ee331db341bbe3a810d399b2aaf729ab81e2f7fb9f1c6cdd77a603936aac99ba",
+        "warmup_time": 1e-06
+    },
+    "benchmarks.time_add_uint32_2D_arrays_numpy_10_default": {
+        "code": "def time_add_uint32_2D_arrays_numpy_10_default(num_samples):\n    a = np.hamming(100).reshape(100, 1)\n    b = np.hamming(100).reshape(1, 100)\n    arr = np.round(a*b*1000).astype(np.uint32)\n    try:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')\n    except TypeError:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='10')\n    with aset as cm_aset:\n        for i in range(num_samples):\n            arr += 1\n            cm_aset[i] = arr\n\ndef repo_co_setup(num_samples):\n    global repo\n    global co\n    global tmpdir\n    tmpdir = mkdtemp()\n    repo = Repository(path=tmpdir, exists=False)\n    repo.init(user_name='tester', user_email='foo@test.bar', remove_old=True)\n    co = repo.checkout(write=True)",
+        "min_run_count": 2,
+        "name": "benchmarks.time_add_uint32_2D_arrays_numpy_10_default",
+        "number": 1,
+        "param_names": [
+            "num_samples"
+        ],
+        "params": [
+            [
+                "500",
+                "10000",
+                "30000"
+            ]
+        ],
+        "processes": 1,
+        "repeat": 1,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "214eaf221ed0989bc56b35b3f722fd2f5d1d2fd88570c5409bee92cae46d7e86",
+        "warmup_time": 1e-06
+    },
+    "benchmarks.track_repo_nbytes_add_float32_2D_arrays_hdf5_00_default": {
+        "code": "def track_repo_nbytes_add_float32_2D_arrays_hdf5_00_default(num_samples):\n    a = np.hamming(100).reshape(100, 1).astype(np.float32)\n    b = np.hamming(100).reshape(1, 100).astype(np.float32)\n    arr = a*b\n    try:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')\n    except TypeError:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='00')\n    with aset as cm_aset:\n        for i in range(num_samples):\n            arr += 1\n            cm_aset[i] = arr\n    co.commit('first commit')\n    co.close()\n    nbytes = folder_size(repo._env.repo_path, recurse=True)\n    return nbytes\n\ndef repo_co_setup(num_samples):\n    global repo\n    global co\n    global tmpdir\n    tmpdir = mkdtemp()\n    repo = Repository(path=tmpdir, exists=False)\n    repo.init(user_name='tester', user_email='foo@test.bar', remove_old=True)\n    co = repo.checkout(write=True)",
+        "name": "benchmarks.track_repo_nbytes_add_float32_2D_arrays_hdf5_00_default",
+        "param_names": [
+            "num_samples"
+        ],
+        "params": [
+            [
+                "500",
+                "10000",
+                "30000"
+            ]
+        ],
+        "timeout": 60.0,
+        "type": "track",
+        "unit": "bytes",
+        "version": "85b144641e89735e1477e4f47f75a5adb43f57c8305fb8ebb5f1bae4aef0ea07"
+    },
+    "benchmarks.track_repo_nbytes_add_float32_2D_arrays_numpy_10_default": {
+        "code": "def track_repo_nbytes_add_float32_2D_arrays_numpy_10_default(num_samples):\n    a = np.hamming(100).reshape(100, 1).astype(np.float32)\n    b = np.hamming(100).reshape(1, 100).astype(np.float32)\n    arr = a*b\n    arr = np.random.randn(100, 100).astype(np.float32)\n    try:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')\n    except TypeError:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='10')\n    with aset as cm_aset:\n        for i in range(num_samples):\n            arr += 1\n            cm_aset[i] = arr\n    co.commit('first commit')\n    co.close()\n    nbytes = folder_size(repo._env.repo_path, recurse=True)\n    return nbytes\n\ndef repo_co_setup(num_samples):\n    global repo\n    global co\n    global tmpdir\n    tmpdir = mkdtemp()\n    repo = Repository(path=tmpdir, exists=False)\n    repo.init(user_name='tester', user_email='foo@test.bar', remove_old=True)\n    co = repo.checkout(write=True)",
+        "name": "benchmarks.track_repo_nbytes_add_float32_2D_arrays_numpy_10_default",
+        "param_names": [
+            "num_samples"
+        ],
+        "params": [
+            [
+                "500",
+                "10000",
+                "30000"
+            ]
+        ],
+        "timeout": 60.0,
+        "type": "track",
+        "unit": "bytes",
+        "version": "d701012d9c668d3d760d273d6df8ec08cb1c035ebe6c706341a4294aa93cd203"
+    },
+    "benchmarks.track_repo_nbytes_add_uint32_2D_arrays_hdf5_00_default": {
+        "code": "def track_repo_nbytes_add_uint32_2D_arrays_hdf5_00_default(num_samples):\n    a = np.hamming(100).reshape(100, 1)\n    b = np.hamming(100).reshape(1, 100)\n    arr = np.round(a*b*1000).astype(np.uint32)\n    try:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')\n    except TypeError:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='00')\n    with aset as cm_aset:\n        for i in range(num_samples):\n            arr += 1\n            cm_aset[i] = arr\n    co.commit('first commit')\n    co.close()\n    nbytes = folder_size(repo._env.repo_path, recurse=True)\n    return nbytes\n\ndef repo_co_setup(num_samples):\n    global repo\n    global co\n    global tmpdir\n    tmpdir = mkdtemp()\n    repo = Repository(path=tmpdir, exists=False)\n    repo.init(user_name='tester', user_email='foo@test.bar', remove_old=True)\n    co = repo.checkout(write=True)",
+        "name": "benchmarks.track_repo_nbytes_add_uint32_2D_arrays_hdf5_00_default",
+        "param_names": [
+            "num_samples"
+        ],
+        "params": [
+            [
+                "500",
+                "10000",
+                "30000"
+            ]
+        ],
+        "timeout": 60.0,
+        "type": "track",
+        "unit": "bytes",
+        "version": "5225c168125006395b6ffa39e952310de46d4d140b362f8ee3e34e975f7500ff"
+    },
+    "benchmarks.track_repo_nbytes_add_uint32_2D_arrays_numpy_10_default": {
+        "code": "def track_repo_nbytes_add_uint32_2D_arrays_numpy_10_default(num_samples):\n    a = np.hamming(100).reshape(100, 1)\n    b = np.hamming(100).reshape(1, 100)\n    arr = np.round(a*b*1000).astype(np.uint32)\n    try:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')\n    except TypeError:\n        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='10')\n    with aset as cm_aset:\n        for i in range(num_samples):\n            arr += 1\n            cm_aset[i] = arr\n    co.commit('first commit')\n    co.close()\n    nbytes = folder_size(repo._env.repo_path, recurse=True)\n    return nbytes\n\ndef repo_co_setup(num_samples):\n    global repo\n    global co\n    global tmpdir\n    tmpdir = mkdtemp()\n    repo = Repository(path=tmpdir, exists=False)\n    repo.init(user_name='tester', user_email='foo@test.bar', remove_old=True)\n    co = repo.checkout(write=True)",
+        "name": "benchmarks.track_repo_nbytes_add_uint32_2D_arrays_numpy_10_default",
+        "param_names": [
+            "num_samples"
+        ],
+        "params": [
+            [
+                "500",
+                "10000",
+                "30000"
+            ]
+        ],
+        "timeout": 60.0,
+        "type": "track",
+        "unit": "bytes",
+        "version": "34a519dd6ef5f02d1199212e034eaa305d9be328942a3a2cd1850453e71c6cb6"
+    },
+    "version": 2
+}

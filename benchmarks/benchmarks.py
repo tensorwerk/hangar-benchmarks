@@ -47,7 +47,10 @@ def time_add_uint32_2D_arrays_hdf5_00_default(num_samples):
     a = np.hamming(100).reshape(100, 1)
     b = np.hamming(100).reshape(1, 100)
     arr = np.round(a*b*1000).astype(np.uint32)
-    aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')
+    try:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')
+    except TypeError:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='00')
     with aset as cm_aset:
         for i in range(num_samples):
             arr += 1
@@ -66,7 +69,10 @@ def peakmem_add_uint32_2D_arrays_hdf5_00_default(num_samples):
     a = np.hamming(100).reshape(100, 1)
     b = np.hamming(100).reshape(1, 100)
     arr = np.round(a*b*1000).astype(np.uint32)
-    aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')
+    try:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')
+    except TypeError:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='00')
     with aset as cm_aset:
         for i in range(num_samples):
             arr[:] += 1
@@ -77,11 +83,15 @@ peakmem_add_uint32_2D_arrays_hdf5_00_default.params = [500, 10_000, 30_000]
 peakmem_add_uint32_2D_arrays_hdf5_00_default.param_names = ['num_samples']
 peakmem_add_uint32_2D_arrays_hdf5_00_default.timeout = 60
 
+
 def track_repo_nbytes_add_uint32_2D_arrays_hdf5_00_default(num_samples):
     a = np.hamming(100).reshape(100, 1)
     b = np.hamming(100).reshape(1, 100)
     arr = np.round(a*b*1000).astype(np.uint32)
-    aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')
+    try:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')
+    except TypeError:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='00')
     with aset as cm_aset:
         for i in range(num_samples):
             arr += 1
@@ -101,7 +111,10 @@ def time_add_float32_2D_arrays_hdf5_00_default(num_samples):
     a = np.hamming(100).reshape(100, 1).astype(np.float32)
     b = np.hamming(100).reshape(1, 100).astype(np.float32)
     arr = a*b
-    aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')
+    try:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')
+    except TypeError:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='00')
     with aset as cm_aset:
         for i in range(num_samples):
             arr += 1.0
@@ -120,7 +133,10 @@ def peakmem_add_float32_2D_arrays_hdf5_00_default(num_samples):
     a = np.hamming(100).reshape(100, 1).astype(np.float32)
     b = np.hamming(100).reshape(1, 100).astype(np.float32)
     arr = a*b
-    aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')
+    try:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')
+    except TypeError:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='00')
     with aset as cm_aset:
         for i in range(num_samples):
             arr += 1
@@ -135,7 +151,10 @@ def track_repo_nbytes_add_float32_2D_arrays_hdf5_00_default(num_samples):
     a = np.hamming(100).reshape(100, 1).astype(np.float32)
     b = np.hamming(100).reshape(1, 100).astype(np.float32)
     arr = a*b
-    aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')
+    try:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')
+    except TypeError:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='00')
     with aset as cm_aset:
         for i in range(num_samples):
             arr += 1
@@ -158,7 +177,10 @@ def time_add_uint32_2D_arrays_numpy_10_default(num_samples):
     a = np.hamming(100).reshape(100, 1)
     b = np.hamming(100).reshape(1, 100)
     arr = np.round(a*b*1000).astype(np.uint32)
-    aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')
+    try:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')
+    except TypeError:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='10')
     with aset as cm_aset:
         for i in range(num_samples):
             arr += 1
@@ -177,7 +199,10 @@ def peakmem_add_uint32_2D_arrays_numpy_10_default(num_samples):
     a = np.hamming(100).reshape(100, 1)
     b = np.hamming(100).reshape(1, 100)
     arr = np.round(a*b*1000).astype(np.uint32)
-    aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')
+    try:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')
+    except TypeError:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='10')
     with aset as cm_aset:
         for i in range(num_samples):
             arr[:] += 1
@@ -192,7 +217,10 @@ def track_repo_nbytes_add_uint32_2D_arrays_numpy_10_default(num_samples):
     a = np.hamming(100).reshape(100, 1)
     b = np.hamming(100).reshape(1, 100)
     arr = np.round(a*b*1000).astype(np.uint32)
-    aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')
+    try:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')
+    except TypeError:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='10')
     with aset as cm_aset:
         for i in range(num_samples):
             arr += 1
@@ -212,7 +240,10 @@ def time_add_float32_2D_arrays_numpy_10_default(num_samples):
     a = np.hamming(100).reshape(100, 1).astype(np.float32)
     b = np.hamming(100).reshape(1, 100).astype(np.float32)
     arr = a*b
-    aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')
+    try:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')
+    except TypeError:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='10')
     with aset as cm_aset:
         for i in range(num_samples):
             arr += 1.0
@@ -232,7 +263,10 @@ def peakmem_add_float32_2D_arrays_numpy_10_default(num_samples):
     a = np.hamming(100).reshape(100, 1).astype(np.float32)
     b = np.hamming(100).reshape(1, 100).astype(np.float32)
     arr = a*b
-    aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')
+    try:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')
+    except TypeError:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='10')
     with aset as cm_aset:
         for i in range(num_samples):
             arr += 1
@@ -248,7 +282,10 @@ def track_repo_nbytes_add_float32_2D_arrays_numpy_10_default(num_samples):
     b = np.hamming(100).reshape(1, 100).astype(np.float32)
     arr = a*b
     arr = np.random.randn(100, 100).astype(np.float32)
-    aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')
+    try:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')
+    except TypeError:
+        aset = co.arraysets.init_arrayset('aset', prototype=arr, backend='10')
     with aset as cm_aset:
         for i in range(num_samples):
             arr += 1
