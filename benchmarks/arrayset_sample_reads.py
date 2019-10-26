@@ -10,8 +10,8 @@ from os import getcwd
 
 class HDF5_00(object):
 
-    processes = 1
-    number = 1
+    processes = 2
+    number = 2
     repeat = 1
     warmup_time = 0
 
@@ -81,8 +81,8 @@ class HDF5_00(object):
 
 class NUMPY_10(object):
 
-    processes = 1
-    number = 1
+    processes = 2
+    number = 2
     repeat = 1
     warmup_time = 0
 

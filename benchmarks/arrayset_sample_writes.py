@@ -11,8 +11,8 @@ class HDF5_00(object):
 
     params = [1_000, 20_000]
     param_names = ['num_samples']
-    processes = 1
-    number = 1
+    processes = 2
+    number = 2
     repeat = 1
     warmup_time = 0
 
@@ -87,8 +87,8 @@ class NUMPY_10(object):
 
     params = [1_000, 20_000]
     param_names = ['num_samples']
-    processes = 1
-    number = 1
+    processes = 2
+    number = 2
     repeat = 1
     warmup_time = 0
 
