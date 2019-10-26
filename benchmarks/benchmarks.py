@@ -44,7 +44,9 @@ def repo_teardown(num_samples):
 
 
 def time_add_uint32_2D_arrays_hdf5_00_default(num_samples):
-    arr = np.random.randint(0, high=200, size=(100, 100), dtype=np.uint32)
+    a = np.hamming(100).reshape(100, 1)
+    b = np.hamming(100).reshape(1, 100)
+    arr = np.round(a*b*1000).astype(np.uint32)
     aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')
     with aset as cm_aset:
         for i in range(num_samples):
@@ -52,12 +54,18 @@ def time_add_uint32_2D_arrays_hdf5_00_default(num_samples):
             cm_aset[i] = arr
 time_add_uint32_2D_arrays_hdf5_00_default.setup = repo_co_setup
 time_add_uint32_2D_arrays_hdf5_00_default.teardown = repo_co_teardown
-time_add_uint32_2D_arrays_hdf5_00_default.params = [50, 500, 5_000, 50_000]
+time_add_uint32_2D_arrays_hdf5_00_default.params = [500, 10_000, 30_000]
 time_add_uint32_2D_arrays_hdf5_00_default.param_names = ['num_samples']
+time_add_uint32_2D_arrays_hdf5_00_default.processes = 1
+time_add_uint32_2D_arrays_hdf5_00_default.number = 1
+time_add_uint32_2D_arrays_hdf5_00_default.repeat = 1
+time_add_uint32_2D_arrays_hdf5_00_default.warmup_time = 0.000001
 
 
 def peakmem_add_uint32_2D_arrays_hdf5_00_default(num_samples):
-    arr = np.random.randint(0, high=200, size=(100, 100), dtype=np.uint32)
+    a = np.hamming(100).reshape(100, 1)
+    b = np.hamming(100).reshape(1, 100)
+    arr = np.round(a*b*1000).astype(np.uint32)
     aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')
     with aset as cm_aset:
         for i in range(num_samples):
@@ -65,12 +73,14 @@ def peakmem_add_uint32_2D_arrays_hdf5_00_default(num_samples):
             cm_aset[i] = arr
 peakmem_add_uint32_2D_arrays_hdf5_00_default.setup = repo_co_setup
 peakmem_add_uint32_2D_arrays_hdf5_00_default.teardown = repo_co_teardown
-peakmem_add_uint32_2D_arrays_hdf5_00_default.params = [50, 500, 5_000, 50_000]
+peakmem_add_uint32_2D_arrays_hdf5_00_default.params = [500, 10_000, 30_000]
 peakmem_add_uint32_2D_arrays_hdf5_00_default.param_names = ['num_samples']
-
+peakmem_add_uint32_2D_arrays_hdf5_00_default.timeout = 60
 
 def track_repo_nbytes_add_uint32_2D_arrays_hdf5_00_default(num_samples):
-    arr = np.random.randint(0, high=200, size=(100, 100), dtype=np.uint32)
+    a = np.hamming(100).reshape(100, 1)
+    b = np.hamming(100).reshape(1, 100)
+    arr = np.round(a*b*1000).astype(np.uint32)
     aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')
     with aset as cm_aset:
         for i in range(num_samples):
@@ -82,12 +92,15 @@ def track_repo_nbytes_add_uint32_2D_arrays_hdf5_00_default(num_samples):
     return nbytes
 track_repo_nbytes_add_uint32_2D_arrays_hdf5_00_default.setup = repo_co_setup
 track_repo_nbytes_add_uint32_2D_arrays_hdf5_00_default.teardown = repo_teardown
-track_repo_nbytes_add_uint32_2D_arrays_hdf5_00_default.params = [50, 500, 5_000, 50_000]
+track_repo_nbytes_add_uint32_2D_arrays_hdf5_00_default.params = [500, 10_000, 30_000]
 track_repo_nbytes_add_uint32_2D_arrays_hdf5_00_default.param_names = ['num_samples']
+track_repo_nbytes_add_uint32_2D_arrays_hdf5_00_default.unit = 'bytes'
 
 
 def time_add_float32_2D_arrays_hdf5_00_default(num_samples):
-    arr = np.random.randn(100, 100).astype(np.float32)
+    a = np.hamming(100).reshape(100, 1).astype(np.float32)
+    b = np.hamming(100).reshape(1, 100).astype(np.float32)
+    arr = a*b
     aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')
     with aset as cm_aset:
         for i in range(num_samples):
@@ -95,25 +108,33 @@ def time_add_float32_2D_arrays_hdf5_00_default(num_samples):
             cm_aset[i] = arr
 time_add_float32_2D_arrays_hdf5_00_default.setup = repo_co_setup
 time_add_float32_2D_arrays_hdf5_00_default.teardown = repo_co_teardown
-time_add_float32_2D_arrays_hdf5_00_default.params = [50, 500, 5_000, 50_000]
+time_add_float32_2D_arrays_hdf5_00_default.params = [500, 10_000, 30_000]
 time_add_float32_2D_arrays_hdf5_00_default.param_names = ['num_samples']
+time_add_float32_2D_arrays_hdf5_00_default.processes = 1
+time_add_float32_2D_arrays_hdf5_00_default.number = 1
+time_add_float32_2D_arrays_hdf5_00_default.repeat = 1
+time_add_float32_2D_arrays_hdf5_00_default.warmup_time = 0.000001
 
 
 def peakmem_add_float32_2D_arrays_hdf5_00_default(num_samples):
-    arr = np.random.randn(100, 100).astype(np.float32)
-    aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')
+    a = np.hamming(100).reshape(100, 1).astype(np.float32)
+    b = np.hamming(100).reshape(1, 100).astype(np.float32)
+    arr = a*b
+    aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')
     with aset as cm_aset:
         for i in range(num_samples):
             arr += 1
             cm_aset[i] = arr
 peakmem_add_float32_2D_arrays_hdf5_00_default.setup = repo_co_setup
 peakmem_add_float32_2D_arrays_hdf5_00_default.teardown = repo_co_teardown
-peakmem_add_float32_2D_arrays_hdf5_00_default.params = [50, 500, 5_000, 50_000]
+peakmem_add_float32_2D_arrays_hdf5_00_default.params = [500, 10_000, 30_000]
 peakmem_add_float32_2D_arrays_hdf5_00_default.param_names = ['num_samples']
 
 
 def track_repo_nbytes_add_float32_2D_arrays_hdf5_00_default(num_samples):
-    arr = np.random.randint(0, high=200, size=(100, 100), dtype=np.float32)
+    a = np.hamming(100).reshape(100, 1).astype(np.float32)
+    b = np.hamming(100).reshape(1, 100).astype(np.float32)
+    arr = a*b
     aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')
     with aset as cm_aset:
         for i in range(num_samples):
@@ -125,28 +146,37 @@ def track_repo_nbytes_add_float32_2D_arrays_hdf5_00_default(num_samples):
     return nbytes
 track_repo_nbytes_add_float32_2D_arrays_hdf5_00_default.setup = repo_co_setup
 track_repo_nbytes_add_float32_2D_arrays_hdf5_00_default.teardown = repo_teardown
-track_repo_nbytes_add_float32_2D_arrays_hdf5_00_default.params = [50, 500, 5_000, 50_000]
+track_repo_nbytes_add_float32_2D_arrays_hdf5_00_default.params = [500, 10_000, 30_000]
 track_repo_nbytes_add_float32_2D_arrays_hdf5_00_default.param_names = ['num_samples']
+track_repo_nbytes_add_float32_2D_arrays_hdf5_00_default.unit = 'bytes'
 
 
 # ------------------------ numpy_10 ------------------------------------------
 
 
 def time_add_uint32_2D_arrays_numpy_10_default(num_samples):
-    arr = np.random.randint(0, high=200, size=(100, 100), dtype=np.uint32)
-    aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')
+    a = np.hamming(100).reshape(100, 1)
+    b = np.hamming(100).reshape(1, 100)
+    arr = np.round(a*b*1000).astype(np.uint32)
+    aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')
     with aset as cm_aset:
         for i in range(num_samples):
             arr += 1
             cm_aset[i] = arr
 time_add_uint32_2D_arrays_numpy_10_default.setup = repo_co_setup
 time_add_uint32_2D_arrays_numpy_10_default.teardown = repo_co_teardown
-time_add_uint32_2D_arrays_numpy_10_default.params = [50, 500, 5_000, 50_000]
+time_add_uint32_2D_arrays_numpy_10_default.params = [500, 10_000, 30_000]
 time_add_uint32_2D_arrays_numpy_10_default.param_names = ['num_samples']
+time_add_uint32_2D_arrays_numpy_10_default.processes = 1
+time_add_uint32_2D_arrays_numpy_10_default.number = 1
+time_add_uint32_2D_arrays_numpy_10_default.repeat = 1
+time_add_uint32_2D_arrays_numpy_10_default.warmup_time = 0.000001
 
 
 def peakmem_add_uint32_2D_arrays_numpy_10_default(num_samples):
-    arr = np.random.randint(0, high=200, size=(100, 100), dtype=np.uint32)
+    a = np.hamming(100).reshape(100, 1)
+    b = np.hamming(100).reshape(1, 100)
+    arr = np.round(a*b*1000).astype(np.uint32)
     aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')
     with aset as cm_aset:
         for i in range(num_samples):
@@ -154,12 +184,14 @@ def peakmem_add_uint32_2D_arrays_numpy_10_default(num_samples):
             cm_aset[i] = arr
 peakmem_add_uint32_2D_arrays_numpy_10_default.setup = repo_co_setup
 peakmem_add_uint32_2D_arrays_numpy_10_default.teardown = repo_co_teardown
-peakmem_add_uint32_2D_arrays_numpy_10_default.params = [50, 500, 5_000, 50_000]
+peakmem_add_uint32_2D_arrays_numpy_10_default.params = [500, 10_000, 30_000]
 peakmem_add_uint32_2D_arrays_numpy_10_default.param_names = ['num_samples']
 
 
 def track_repo_nbytes_add_uint32_2D_arrays_numpy_10_default(num_samples):
-    arr = np.random.randint(0, high=200, size=(100, 100), dtype=np.uint32)
+    a = np.hamming(100).reshape(100, 1)
+    b = np.hamming(100).reshape(1, 100)
+    arr = np.round(a*b*1000).astype(np.uint32)
     aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')
     with aset as cm_aset:
         for i in range(num_samples):
@@ -171,12 +203,15 @@ def track_repo_nbytes_add_uint32_2D_arrays_numpy_10_default(num_samples):
     return nbytes
 track_repo_nbytes_add_uint32_2D_arrays_numpy_10_default.setup = repo_co_setup
 track_repo_nbytes_add_uint32_2D_arrays_numpy_10_default.teardown = repo_teardown
-track_repo_nbytes_add_uint32_2D_arrays_numpy_10_default.params = [50, 500, 5_000, 50_000]
+track_repo_nbytes_add_uint32_2D_arrays_numpy_10_default.params = [500, 10_000, 30_000]
 track_repo_nbytes_add_uint32_2D_arrays_numpy_10_default.param_names = ['num_samples']
+track_repo_nbytes_add_uint32_2D_arrays_numpy_10_default.unit = 'bytes'
 
 
 def time_add_float32_2D_arrays_numpy_10_default(num_samples):
-    arr = np.random.randn(100, 100).astype(np.float32)
+    a = np.hamming(100).reshape(100, 1).astype(np.float32)
+    b = np.hamming(100).reshape(1, 100).astype(np.float32)
+    arr = a*b
     aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')
     with aset as cm_aset:
         for i in range(num_samples):
@@ -184,12 +219,19 @@ def time_add_float32_2D_arrays_numpy_10_default(num_samples):
             cm_aset[i] = arr
 time_add_float32_2D_arrays_numpy_10_default.setup = repo_co_setup
 time_add_float32_2D_arrays_numpy_10_default.teardown = repo_co_teardown
-time_add_float32_2D_arrays_numpy_10_default.params = [50, 500, 5_000, 50_000]
+time_add_float32_2D_arrays_numpy_10_default.params = [500, 10_000, 30_000]
 time_add_float32_2D_arrays_numpy_10_default.param_names = ['num_samples']
+time_add_float32_2D_arrays_numpy_10_default.processes = 1
+time_add_float32_2D_arrays_numpy_10_default.number = 1
+time_add_float32_2D_arrays_numpy_10_default.repeat = 1
+time_add_float32_2D_arrays_numpy_10_default.warmup_time = 0.000001
+
 
 
 def peakmem_add_float32_2D_arrays_numpy_10_default(num_samples):
-    arr = np.random.randn(100, 100).astype(np.float32)
+    a = np.hamming(100).reshape(100, 1).astype(np.float32)
+    b = np.hamming(100).reshape(1, 100).astype(np.float32)
+    arr = a*b
     aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')
     with aset as cm_aset:
         for i in range(num_samples):
@@ -197,12 +239,15 @@ def peakmem_add_float32_2D_arrays_numpy_10_default(num_samples):
             cm_aset[i] = arr
 peakmem_add_float32_2D_arrays_numpy_10_default.setup = repo_co_setup
 peakmem_add_float32_2D_arrays_numpy_10_default.teardown = repo_co_teardown
-peakmem_add_float32_2D_arrays_numpy_10_default.params = [50, 500, 5_000, 50_000]
+peakmem_add_float32_2D_arrays_numpy_10_default.params = [500, 10_000, 30_000]
 peakmem_add_float32_2D_arrays_numpy_10_default.param_names = ['num_samples']
 
 
 def track_repo_nbytes_add_float32_2D_arrays_numpy_10_default(num_samples):
-    arr = np.random.randint(0, high=200, size=(100, 100), dtype=np.float32)
+    a = np.hamming(100).reshape(100, 1).astype(np.float32)
+    b = np.hamming(100).reshape(1, 100).astype(np.float32)
+    arr = a*b
+    arr = np.random.randn(100, 100).astype(np.float32)
     aset = co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')
     with aset as cm_aset:
         for i in range(num_samples):
@@ -214,5 +259,6 @@ def track_repo_nbytes_add_float32_2D_arrays_numpy_10_default(num_samples):
     return nbytes
 track_repo_nbytes_add_float32_2D_arrays_numpy_10_default.setup = repo_co_setup
 track_repo_nbytes_add_float32_2D_arrays_numpy_10_default.teardown = repo_teardown
-track_repo_nbytes_add_float32_2D_arrays_numpy_10_default.params = [50, 500, 5_000, 50_000]
+track_repo_nbytes_add_float32_2D_arrays_numpy_10_default.params = [500, 10_000, 30_000]
 track_repo_nbytes_add_float32_2D_arrays_numpy_10_default.param_names = ['num_samples']
+track_repo_nbytes_add_float32_2D_arrays_numpy_10_default.unit = 'bytes'

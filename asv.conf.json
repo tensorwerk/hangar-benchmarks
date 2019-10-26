@@ -17,11 +17,11 @@
 
     "benchmark_dir": "benchmarks",
 
-    "env_dir": ".asv/env",
+    "env_dir": "env",
 
-    "results_dir": ".asv/results",
+    "results_dir": "results",
 
-    "html_dir": ".asv/html",
+    "html_dir": "html",
 
     "hash_length": 8,
 
