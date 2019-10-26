@@ -23,8 +23,8 @@ Benchmarking Suite for the Hangar Project
 Hangar is version control for tensor data. Commit, branch, merge, revert, and
 collaborate in the data-defined software era.
 
+* Hangar Project: https://github.com/tensorwerk/hangar-py
 
-https://github.com/tensorwerk/hangar-py
-
+* Benchmark Web View: https://tensorwerk.com/hangar-benchmarks
 
 * Free software: Apache 2.0 license
