@@ -11,10 +11,10 @@ class HDF5_00(object):
 
     params = [1_000, 20_000]
     param_names = ['num_samples']
-    processes = 2
-    number = 2
+    processes = 1
+    number = 1
     repeat = 1
-    warmup_time = 0
+    warmup_time = 0.000001
 
     def setup(self, num_samples):
         self.tmpdir = mkdtemp()
@@ -87,10 +87,10 @@ class NUMPY_10(object):
 
     params = [1_000, 20_000]
     param_names = ['num_samples']
-    processes = 2
-    number = 2
+    processes = 1
+    number = 1
     repeat = 1
-    warmup_time = 0
+    warmup_time = 0.0000001
 
     def setup(self, num_samples):
         self.tmpdir = mkdtemp()

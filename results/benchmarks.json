@@ -1,6 +1,6 @@
 {
     "arrayset_sample_reads.HDF5_00.peakmem_read_float32_20000_samples": {
-        "code": "class HDF5_00:\n    def peakmem_read_float32_20000_samples(self):\n        aset = self.co.arraysets['aset_float']\n        with aset as cm_aset:\n            for i in range(20_000):\n                arr = cm_aset[i]\n\n    def setup(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=False)\n        self.co = repo.checkout(write=False)\n\n    def setup_cache(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=False)\n        repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        arrint = np.round(aint * bint * 1000).astype(np.uint16)\n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        arrfloat = afloat * bfloat\n        try:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend_opts='00')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend_opts='00')\n        except TypeError:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend='00')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend='00')\n        with aset_int as cm_aset_int, aset_float as cm_aset_float:\n            for i in range(20_000):\n                arrfloat += 1\n                arrint += 1\n                cm_aset_float[i] = arrfloat\n                cm_aset_int[i] = arrint\n        co.commit('first commit')\n        co.close()",
+        "code": "class HDF5_00:\n    def peakmem_read_float32_20000_samples(self):\n        aset = self.co.arraysets['aset_float']\n        with aset as cm_aset:\n            for i in range(20_000):\n                arr = cm_aset[i]\n\n    def setup(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=True)\n        self.co = repo.checkout(write=False)\n\n    def setup_cache(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=False)\n        repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        arrint = np.round(aint * bint * 1000).astype(np.uint16)\n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        arrfloat = afloat * bfloat\n        try:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend_opts='00')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend_opts='00')\n        except TypeError:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend='00')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend='00')\n        with aset_int as cm_aset_int, aset_float as cm_aset_float:\n            for i in range(20_000):\n                arrfloat += 1\n                arrint += 1\n                cm_aset_float[i] = arrfloat\n                cm_aset_int[i] = arrint\n        co.commit('first commit')\n        co.close()",
         "name": "arrayset_sample_reads.HDF5_00.peakmem_read_float32_20000_samples",
         "param_names": [],
         "params": [],
@@ -8,10 +8,10 @@
         "timeout": 60.0,
         "type": "peakmemory",
         "unit": "bytes",
-        "version": "3ab057acc87273b47ae1eddd7196083eae9c0e01c676ab709c35bd34c8542b91"
+        "version": "24ec66eae5f9924590634509a34e1d1c622a4c84e23c9f7dd5a9240d6688124e"
     },
     "arrayset_sample_reads.HDF5_00.peakmem_read_uint16_20000_samples": {
-        "code": "class HDF5_00:\n    def peakmem_read_uint16_20000_samples(self):\n        aset = self.co.arraysets['aset_int']\n        with aset as cm_aset:\n            for i in range(20_000):\n                arr = cm_aset[i]\n\n    def setup(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=False)\n        self.co = repo.checkout(write=False)\n\n    def setup_cache(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=False)\n        repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        arrint = np.round(aint * bint * 1000).astype(np.uint16)\n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        arrfloat = afloat * bfloat\n        try:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend_opts='00')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend_opts='00')\n        except TypeError:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend='00')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend='00')\n        with aset_int as cm_aset_int, aset_float as cm_aset_float:\n            for i in range(20_000):\n                arrfloat += 1\n                arrint += 1\n                cm_aset_float[i] = arrfloat\n                cm_aset_int[i] = arrint\n        co.commit('first commit')\n        co.close()",
+        "code": "class HDF5_00:\n    def peakmem_read_uint16_20000_samples(self):\n        aset = self.co.arraysets['aset_int']\n        with aset as cm_aset:\n            for i in range(20_000):\n                arr = cm_aset[i]\n\n    def setup(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=True)\n        self.co = repo.checkout(write=False)\n\n    def setup_cache(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=False)\n        repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        arrint = np.round(aint * bint * 1000).astype(np.uint16)\n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        arrfloat = afloat * bfloat\n        try:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend_opts='00')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend_opts='00')\n        except TypeError:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend='00')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend='00')\n        with aset_int as cm_aset_int, aset_float as cm_aset_float:\n            for i in range(20_000):\n                arrfloat += 1\n                arrint += 1\n                cm_aset_float[i] = arrfloat\n                cm_aset_int[i] = arrint\n        co.commit('first commit')\n        co.close()",
         "name": "arrayset_sample_reads.HDF5_00.peakmem_read_uint16_20000_samples",
         "param_names": [],
         "params": [],
@@ -19,41 +19,41 @@
         "timeout": 60.0,
         "type": "peakmemory",
         "unit": "bytes",
-        "version": "d42882642becba5656277304071f0f0670da4373a564299038a77984a43e6749"
+        "version": "09b2d0b602cd96d7c4dc1e15ec4d11e4ed0097c823a013d3c6f95eccfa106cd5"
     },
     "arrayset_sample_reads.HDF5_00.time_read_float32_20000_samples": {
-        "code": "class HDF5_00:\n    def time_read_float32_20000_samples(self):\n        aset = self.co.arraysets['aset_float']\n        with aset as cm_aset:\n            for i in range(20_000):\n                arr = cm_aset[i]\n\n    def setup(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=False)\n        self.co = repo.checkout(write=False)\n\n    def setup_cache(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=False)\n        repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        arrint = np.round(aint * bint * 1000).astype(np.uint16)\n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        arrfloat = afloat * bfloat\n        try:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend_opts='00')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend_opts='00')\n        except TypeError:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend='00')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend='00')\n        with aset_int as cm_aset_int, aset_float as cm_aset_float:\n            for i in range(20_000):\n                arrfloat += 1\n                arrint += 1\n                cm_aset_float[i] = arrfloat\n                cm_aset_int[i] = arrint\n        co.commit('first commit')\n        co.close()",
+        "code": "class HDF5_00:\n    def time_read_float32_20000_samples(self):\n        aset = self.co.arraysets['aset_float']\n        with aset as cm_aset:\n            for i in range(20_000):\n                arr = cm_aset[i]\n\n    def setup(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=True)\n        self.co = repo.checkout(write=False)\n\n    def setup_cache(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=False)\n        repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        arrint = np.round(aint * bint * 1000).astype(np.uint16)\n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        arrfloat = afloat * bfloat\n        try:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend_opts='00')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend_opts='00')\n        except TypeError:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend='00')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend='00')\n        with aset_int as cm_aset_int, aset_float as cm_aset_float:\n            for i in range(20_000):\n                arrfloat += 1\n                arrint += 1\n                cm_aset_float[i] = arrfloat\n                cm_aset_int[i] = arrint\n        co.commit('first commit')\n        co.close()",
         "min_run_count": 2,
         "name": "arrayset_sample_reads.HDF5_00.time_read_float32_20000_samples",
-        "number": 2,
+        "number": 1,
         "param_names": [],
         "params": [],
-        "processes": 2,
+        "processes": 1,
         "repeat": 1,
         "sample_time": 0.01,
         "setup_cache_key": "/home/rick/hangar-benchmarks/benchmarks/arrayset_sample_reads.py:18",
         "timeout": 60.0,
         "type": "time",
         "unit": "seconds",
-        "version": "036f7d69dd3e15b4c8849f5904f68bdadadffc483f1a643b3c8a95421324772f",
-        "warmup_time": 0
+        "version": "3210c4edb6a2d0b22d5239f6d107d8e8185874b16a5516d5e3a7d2062b6e7de6",
+        "warmup_time": 1e-08
     },
     "arrayset_sample_reads.HDF5_00.time_read_uint16_20000_samples": {
-        "code": "class HDF5_00:\n    def time_read_uint16_20000_samples(self):\n        aset = self.co.arraysets['aset_int']\n        with aset as cm_aset:\n            for i in range(20_000):\n                arr = cm_aset[i]\n\n    def setup(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=False)\n        self.co = repo.checkout(write=False)\n\n    def setup_cache(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=False)\n        repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        arrint = np.round(aint * bint * 1000).astype(np.uint16)\n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        arrfloat = afloat * bfloat\n        try:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend_opts='00')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend_opts='00')\n        except TypeError:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend='00')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend='00')\n        with aset_int as cm_aset_int, aset_float as cm_aset_float:\n            for i in range(20_000):\n                arrfloat += 1\n                arrint += 1\n                cm_aset_float[i] = arrfloat\n                cm_aset_int[i] = arrint\n        co.commit('first commit')\n        co.close()",
+        "code": "class HDF5_00:\n    def time_read_uint16_20000_samples(self):\n        aset = self.co.arraysets['aset_int']\n        with aset as cm_aset:\n            for i in range(20_000):\n                arr = cm_aset[i]\n\n    def setup(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=True)\n        self.co = repo.checkout(write=False)\n\n    def setup_cache(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=False)\n        repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        arrint = np.round(aint * bint * 1000).astype(np.uint16)\n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        arrfloat = afloat * bfloat\n        try:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend_opts='00')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend_opts='00')\n        except TypeError:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend='00')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend='00')\n        with aset_int as cm_aset_int, aset_float as cm_aset_float:\n            for i in range(20_000):\n                arrfloat += 1\n                arrint += 1\n                cm_aset_float[i] = arrfloat\n                cm_aset_int[i] = arrint\n        co.commit('first commit')\n        co.close()",
         "min_run_count": 2,
         "name": "arrayset_sample_reads.HDF5_00.time_read_uint16_20000_samples",
-        "number": 2,
+        "number": 1,
         "param_names": [],
         "params": [],
-        "processes": 2,
+        "processes": 1,
         "repeat": 1,
         "sample_time": 0.01,
         "setup_cache_key": "/home/rick/hangar-benchmarks/benchmarks/arrayset_sample_reads.py:18",
         "timeout": 60.0,
         "type": "time",
         "unit": "seconds",
-        "version": "5fb3c2d166291c09a7177b4c8846e7c8a1cd7324042932909ce63589a4b89a3b",
-        "warmup_time": 0
+        "version": "41f161f5b1dae1be34f663c064c074eac669dbc73a51c5230232289457ff0b68",
+        "warmup_time": 1e-08
     },
     "arrayset_sample_reads.NUMPY_10.peakmem_read_float32_20000_samples": {
         "code": "class NUMPY_10:\n    def peakmem_read_float32_20000_samples(self):\n        aset = self.co.arraysets['aset_float']\n        with aset as cm_aset:\n            for i in range(20_000):\n                arr = cm_aset[i]\n\n    def setup(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=False)\n        self.co = repo.checkout(write=False)\n\n    def setup_cache(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=False)\n        repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        arrint = np.round(aint * bint * 1000).astype(np.uint16)\n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        arrfloat = afloat * bfloat\n        try:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend_opts='10')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend_opts='10')\n        except TypeError:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend='10')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend='10')\n        with aset_int as cm_aset_int, aset_float as cm_aset_float:\n            for i in range(20_000):\n                arrfloat += 1\n                arrint += 1\n                cm_aset_float[i] = arrfloat\n                cm_aset_int[i] = arrint\n        co.commit('first commit')\n        co.close()",
@@ -81,10 +81,10 @@
         "code": "class NUMPY_10:\n    def time_read_float32_20000_samples(self):\n        aset = self.co.arraysets['aset_float']\n        with aset as cm_aset:\n            for i in range(20_000):\n                arr = cm_aset[i]\n\n    def setup(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=False)\n        self.co = repo.checkout(write=False)\n\n    def setup_cache(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=False)\n        repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        arrint = np.round(aint * bint * 1000).astype(np.uint16)\n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        arrfloat = afloat * bfloat\n        try:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend_opts='10')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend_opts='10')\n        except TypeError:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend='10')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend='10')\n        with aset_int as cm_aset_int, aset_float as cm_aset_float:\n            for i in range(20_000):\n                arrfloat += 1\n                arrint += 1\n                cm_aset_float[i] = arrfloat\n                cm_aset_int[i] = arrint\n        co.commit('first commit')\n        co.close()",
         "min_run_count": 2,
         "name": "arrayset_sample_reads.NUMPY_10.time_read_float32_20000_samples",
-        "number": 2,
+        "number": 1,
         "param_names": [],
         "params": [],
-        "processes": 2,
+        "processes": 1,
         "repeat": 1,
         "sample_time": 0.01,
         "setup_cache_key": "/home/rick/hangar-benchmarks/benchmarks/arrayset_sample_reads.py:89",
@@ -92,16 +92,16 @@
         "type": "time",
         "unit": "seconds",
         "version": "8a15359290e98e3981ffadaaeb175c64fcc4404b5b5d12996c6777180a971887",
-        "warmup_time": 0
+        "warmup_time": 1e-08
     },
     "arrayset_sample_reads.NUMPY_10.time_read_uint16_20000_samples": {
         "code": "class NUMPY_10:\n    def time_read_uint16_20000_samples(self):\n        aset = self.co.arraysets['aset_int']\n        with aset as cm_aset:\n            for i in range(20_000):\n                arr = cm_aset[i]\n\n    def setup(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=False)\n        self.co = repo.checkout(write=False)\n\n    def setup_cache(self):\n        tmpdir = getcwd()\n        repo = Repository(path=tmpdir, exists=False)\n        repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        arrint = np.round(aint * bint * 1000).astype(np.uint16)\n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        arrfloat = afloat * bfloat\n        try:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend_opts='10')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend_opts='10')\n        except TypeError:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend='10')\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend='10')\n        with aset_int as cm_aset_int, aset_float as cm_aset_float:\n            for i in range(20_000):\n                arrfloat += 1\n                arrint += 1\n                cm_aset_float[i] = arrfloat\n                cm_aset_int[i] = arrint\n        co.commit('first commit')\n        co.close()",
         "min_run_count": 2,
         "name": "arrayset_sample_reads.NUMPY_10.time_read_uint16_20000_samples",
-        "number": 2,
+        "number": 1,
         "param_names": [],
         "params": [],
-        "processes": 2,
+        "processes": 1,
         "repeat": 1,
         "sample_time": 0.01,
         "setup_cache_key": "/home/rick/hangar-benchmarks/benchmarks/arrayset_sample_reads.py:89",
@@ -109,13 +109,13 @@
         "type": "time",
         "unit": "seconds",
         "version": "264ea78115d29f33c6316ec5a39d4fc7890050009aec3bb8ad001edc15de0f72",
-        "warmup_time": 0
+        "warmup_time": 1e-08
     },
     "arrayset_sample_writes.HDF5_00.time_add_float32_samples": {
         "code": "class HDF5_00:\n    def time_add_float32_samples(self, num_samples):\n        arr = np.copy(self.arrfloat)\n        with self.aset_float as cm_aset:\n            for i in range(num_samples):\n                arr += 1\n                cm_aset[i] = arr\n\n    def setup(self, num_samples):\n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        self.arrint = np.round(aint * bint * 1000).astype(np.uint16)\n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        self.arrfloat = afloat * bfloat\n        try:\n            self.aset_int = self.co.arraysets.init_arrayset(\n                'aset_int', prototype=self.arrint, backend_opts='00')\n            self.aset_float = self.co.arraysets.init_arrayset(\n                'aset_float', prototype=self.arrfloat, backend_opts='00')\n        except TypeError:\n            self.aset_int = self.co.arraysets.init_arrayset(\n                'aset_int', prototype=self.arrint, backend='00')\n            self.aset_float = self.co.arraysets.init_arrayset(\n                'aset_float', prototype=self.arrfloat, backend='00')",
         "min_run_count": 2,
         "name": "arrayset_sample_writes.HDF5_00.time_add_float32_samples",
-        "number": 2,
+        "number": 1,
         "param_names": [
             "num_samples"
         ],
@@ -125,20 +125,20 @@
                 "20000"
             ]
         ],
-        "processes": 2,
+        "processes": 1,
         "repeat": 1,
         "sample_time": 0.01,
         "timeout": 60.0,
         "type": "time",
         "unit": "seconds",
         "version": "1b49c6aa63ba1ffeead62d208af6d58915bd281f8f8ea2f98296cc4c1c1412c1",
-        "warmup_time": 0
+        "warmup_time": 1e-06
     },
     "arrayset_sample_writes.HDF5_00.time_add_uint16_samples": {
         "code": "class HDF5_00:\n    def time_add_uint16_samples(self, num_samples):\n        arr = np.copy(self.arrint)\n        with self.aset_int as cm_aset:\n            for i in range(num_samples):\n                arr += 1\n                cm_aset[i] = arr\n\n    def setup(self, num_samples):\n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        self.arrint = np.round(aint * bint * 1000).astype(np.uint16)\n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        self.arrfloat = afloat * bfloat\n        try:\n            self.aset_int = self.co.arraysets.init_arrayset(\n                'aset_int', prototype=self.arrint, backend_opts='00')\n            self.aset_float = self.co.arraysets.init_arrayset(\n                'aset_float', prototype=self.arrfloat, backend_opts='00')\n        except TypeError:\n            self.aset_int = self.co.arraysets.init_arrayset(\n                'aset_int', prototype=self.arrint, backend='00')\n            self.aset_float = self.co.arraysets.init_arrayset(\n                'aset_float', prototype=self.arrfloat, backend='00')",
         "min_run_count": 2,
         "name": "arrayset_sample_writes.HDF5_00.time_add_uint16_samples",
-        "number": 2,
+        "number": 1,
         "param_names": [
             "num_samples"
         ],
@@ -148,14 +148,14 @@
                 "20000"
             ]
         ],
-        "processes": 2,
+        "processes": 1,
         "repeat": 1,
         "sample_time": 0.01,
         "timeout": 60.0,
         "type": "time",
         "unit": "seconds",
         "version": "5fb8e40d8416b791b2efddc19127809940feec0f16743b65aa9e1de4b4e3e1b8",
-        "warmup_time": 0
+        "warmup_time": 1e-06
     },
     "arrayset_sample_writes.HDF5_00.track_repo_size_float32_samples": {
         "code": "class HDF5_00:\n    def track_repo_size_float32_samples(self, num_samples):\n        arr = np.copy(self.arrfloat)\n        with self.aset_float as cm_aset:\n            for i in range(num_samples):\n                arr += 1\n                cm_aset[i] = arr\n        self.co.commit('first commit')\n        nbytes = folder_size(self.repo._env.repo_path, recurse=True)\n        return nbytes\n\n    def setup(self, num_samples):\n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        self.arrint = np.round(aint * bint * 1000).astype(np.uint16)\n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        self.arrfloat = afloat * bfloat\n        try:\n            self.aset_int = self.co.arraysets.init_arrayset(\n                'aset_int', prototype=self.arrint, backend_opts='00')\n            self.aset_float = self.co.arraysets.init_arrayset(\n                'aset_float', prototype=self.arrfloat, backend_opts='00')\n        except TypeError:\n            self.aset_int = self.co.arraysets.init_arrayset(\n                'aset_int', prototype=self.arrint, backend='00')\n            self.aset_float = self.co.arraysets.init_arrayset(\n                'aset_float', prototype=self.arrfloat, backend='00')",
@@ -195,7 +195,7 @@
         "code": "class NUMPY_10:\n    def time_add_float32_samples(self, num_samples):\n        arr = np.copy(self.arrfloat)\n        with self.aset_float as cm_aset:\n            for i in range(num_samples):\n                arr += 1\n                cm_aset[i] = arr\n\n    def setup(self, num_samples):\n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        self.arrint = np.round(aint * bint * 1000).astype(np.uint16)\n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        self.arrfloat = afloat * bfloat\n        try:\n            self.aset_int = self.co.arraysets.init_arrayset(\n                'aset_int', prototype=self.arrint, backend_opts='10')\n            self.aset_float = self.co.arraysets.init_arrayset(\n                'aset_float', prototype=self.arrfloat, backend_opts='10')\n        except TypeError:\n            self.aset_int = self.co.arraysets.init_arrayset(\n                'aset_int', prototype=self.arrint, backend='10')\n            self.aset_float = self.co.arraysets.init_arrayset(\n                'aset_float', prototype=self.arrfloat, backend='10')",
         "min_run_count": 2,
         "name": "arrayset_sample_writes.NUMPY_10.time_add_float32_samples",
-        "number": 2,
+        "number": 1,
         "param_names": [
             "num_samples"
         ],
@@ -205,20 +205,20 @@
                 "20000"
             ]
         ],
-        "processes": 2,
+        "processes": 1,
         "repeat": 1,
         "sample_time": 0.01,
         "timeout": 60.0,
         "type": "time",
         "unit": "seconds",
         "version": "3aa4f7c7d0dc2cfe8cca74e9078f4b1f1adeb996da8dd0e0097c0cc19dbe08c7",
-        "warmup_time": 0
+        "warmup_time": 1e-07
     },
     "arrayset_sample_writes.NUMPY_10.time_add_uint16_samples": {
         "code": "class NUMPY_10:\n    def time_add_uint16_samples(self, num_samples):\n        arr = np.copy(self.arrint)\n        with self.aset_int as cm_aset:\n            for i in range(num_samples):\n                arr += 1\n                cm_aset[i] = arr\n\n    def setup(self, num_samples):\n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        self.arrint = np.round(aint * bint * 1000).astype(np.uint16)\n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        self.arrfloat = afloat * bfloat\n        try:\n            self.aset_int = self.co.arraysets.init_arrayset(\n                'aset_int', prototype=self.arrint, backend_opts='10')\n            self.aset_float = self.co.arraysets.init_arrayset(\n                'aset_float', prototype=self.arrfloat, backend_opts='10')\n        except TypeError:\n            self.aset_int = self.co.arraysets.init_arrayset(\n                'aset_int', prototype=self.arrint, backend='10')\n            self.aset_float = self.co.arraysets.init_arrayset(\n                'aset_float', prototype=self.arrfloat, backend='10')",
         "min_run_count": 2,
         "name": "arrayset_sample_writes.NUMPY_10.time_add_uint16_samples",
-        "number": 2,
+        "number": 1,
         "param_names": [
             "num_samples"
         ],
@@ -228,14 +228,14 @@
                 "20000"
             ]
         ],
-        "processes": 2,
+        "processes": 1,
         "repeat": 1,
         "sample_time": 0.01,
         "timeout": 60.0,
         "type": "time",
         "unit": "seconds",
         "version": "27464ed9ea93e4274b0176c9a7ce20270ab8efe525dde3c2c2d6cec1e334bfdc",
-        "warmup_time": 0
+        "warmup_time": 1e-07
     },
     "arrayset_sample_writes.NUMPY_10.track_repo_size_float32_samples": {
         "code": "class NUMPY_10:\n    def track_repo_size_float32_samples(self, num_samples):\n        arr = np.copy(self.arrfloat)\n        with self.aset_float as cm_aset:\n            for i in range(num_samples):\n                arr += 1\n                cm_aset[i] = arr\n        self.co.commit('first commit')\n        nbytes = folder_size(self.repo._env.repo_path, recurse=True)\n        return nbytes\n\n    def setup(self, num_samples):\n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        self.arrint = np.round(aint * bint * 1000).astype(np.uint16)\n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        self.arrfloat = afloat * bfloat\n        try:\n            self.aset_int = self.co.arraysets.init_arrayset(\n                'aset_int', prototype=self.arrint, backend_opts='10')\n            self.aset_float = self.co.arraysets.init_arrayset(\n                'aset_float', prototype=self.arrfloat, backend_opts='10')\n        except TypeError:\n            self.aset_int = self.co.arraysets.init_arrayset(\n                'aset_int', prototype=self.arrint, backend='10')\n            self.aset_float = self.co.arraysets.init_arrayset(\n                'aset_float', prototype=self.arrfloat, backend='10')",

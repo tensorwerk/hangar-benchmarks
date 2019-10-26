@@ -10,10 +10,10 @@ from os import getcwd
 
 class HDF5_00(object):
 
-    processes = 2
-    number = 2
+    processes = 1
+    number = 1
     repeat = 1
-    warmup_time = 0
+    warmup_time = 0.00000001
 
     def setup_cache(self):
         tmpdir = getcwd()
@@ -48,7 +48,7 @@ class HDF5_00(object):
 
     def setup(self):
         tmpdir = getcwd()
-        repo = Repository(path=tmpdir, exists=False)
+        repo = Repository(path=tmpdir, exists=True)
         self.co = repo.checkout(write=False)
 
     def teardown(self):
@@ -81,10 +81,10 @@ class HDF5_00(object):
 
 class NUMPY_10(object):
 
-    processes = 2
-    number = 2
+    processes = 1
+    number = 1
     repeat = 1
-    warmup_time = 0
+    warmup_time = 0.00000001
 
     def setup_cache(self):
         tmpdir = getcwd()
