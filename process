@@ -1,0 +1,21 @@
+#! /bin/bash
+
+BRANCH_NAME=master
+
+echo "START ASV MACHINE" | tee -a asv.log
+
+# asv machine --machine "gcloud-build-n1-highcpu-8" --os "docker-linux" --num_cpu "8" --arch "x86_64" --ram "7.20GB" --config "asv.conf.json"
+
+echo "ASV BRANCH NAME: ${BRANCH_NAME}" | tee -a asv.log
+
+# asv run --machine "gcloud-build-n1-highcpu-8" master~1 | tee -a asv.log
+
+# asv run --machine "rli-MPP17" master..master~1 | tee -a asv.log
+
+asv continuous --machine "rli-MPP17" master~1 master | tee -a asv.log
+
+# asv compare --machine "gcloud-build-n1-highcpu-8" master~1 master | tee -a asv.log
+
+# asv compare --machine "rli-MPP17" master~1 master | tee -a asv.log
+
+echo "DONE" | tee -a asv.log
