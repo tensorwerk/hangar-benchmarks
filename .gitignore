@@ -26,6 +26,7 @@ pyvenv*/
 pip-log.txt
 
 # Unit test / coverage reports
+.asv/
 .coverage
 .tox
 .coverage.*
@@ -33,6 +34,7 @@ pip-log.txt
 nosetests.xml
 coverage.xml
 htmlcov
+
 
 # Translations
 *.mo
