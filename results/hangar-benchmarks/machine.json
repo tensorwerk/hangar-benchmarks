@@ -1,9 +1,0 @@
-{
-    "arch": "x86_64",
-    "cpu": "Intel(R) Xeon(R) CPU @ 2.30GHz (8 cores)",
-    "machine": "hangar-benchmarks",
-    "num_cpu": "8",
-    "os": "Linux 5.0.0-1021-gcp",
-    "ram": "30873004",
-    "version": 1
-}
