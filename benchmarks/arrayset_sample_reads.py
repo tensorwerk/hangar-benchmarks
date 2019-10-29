@@ -2,167 +2,115 @@
 # See "Writing benchmarks" in the asv docs for more information.
 import numpy as np
 from hangar import Repository
-from os import getcwd
+from tempfile import mkdtemp
+from shutil import rmtree
+from hangar.utils import folder_size
 
 
 # ------------------------- fixture functions ----------------------------------
 
 
-class HDF5_00(object):
+class UINT16_DType(object):
 
-    processes = 1
-    number = 1
-    repeat = 1
-    warmup_time = 0.00000001
+    params = ['hdf5_00', 'numpy_10']
+    param_names = ['backend']
+    processes = 2
+    number = 2
+    repeat = 2
+    warmup_time = 0
 
-    def setup_cache(self):
-        tmpdir = getcwd()
-        repo = Repository(path=tmpdir, exists=False)
-        repo.init('tester', 'foo@test.bar', remove_old=True)
-        co = repo.checkout(write=True)
+    def setup(self, backend):
+        self.tmpdir = mkdtemp()
+        self.repo = Repository(path=self.tmpdir, exists=False)
+        self.repo.init('tester', 'foo@test.bar', remove_old=True)
+        co = self.repo.checkout(write=True)
 
-        aint = np.hamming(250).reshape(250, 1)
-        bint = np.hamming(250).reshape(1, 250)
+        aint = np.hamming(100).reshape(100, 1)
+        bint = np.hamming(100).reshape(1, 100)
         cint = np.round(aint * bint * 1000).astype(np.uint16)
-        arrint = np.zeros((250, 250, 3), dtype=cint.dtype)
-        arrint[:, :, 0] = cint
-        arrint[:, :, 1] = cint + 1
-        arrint[:, :, 2] = cint + 2
+        arrint = np.zeros((100, 100), dtype=cint.dtype)
+        arrint[:, :] = cint
 
-        afloat = np.hamming(250).reshape(250, 1).astype(np.float32)
-        bfloat = np.hamming(250).reshape(1, 250).astype(np.float32)
-        cfloat = np.round(afloat * bfloat * 1000)
-        arrfloat = np.zeros((250, 250, 3), dtype=cfloat.dtype)
-        arrfloat[:, :, 0] = cfloat
-        arrfloat[:, :, 1] = cfloat + 1
-        arrfloat[:, :, 2] = cfloat + 2
+        backend_code = backend[-2:]
         try:
             aset_int = co.arraysets.init_arrayset(
-                'aset_int', prototype=arrint, backend_opts='00')
-            aset_float = co.arraysets.init_arrayset(
-                'aset_float', prototype=arrfloat, backend_opts='00')
+                'aset_int', prototype=arrint, backend_opts=backend_code)
         except TypeError:
             aset_int = co.arraysets.init_arrayset(
-                'aset_int', prototype=arrint, backend='00')
-            aset_float = co.arraysets.init_arrayset(
-                'aset_float', prototype=arrfloat, backend='00')
-        with aset_int as cm_aset_int, aset_float as cm_aset_float:
-            for i in range(2_000):
-                arrfloat += 1
+                'aset_int', prototype=arrint, backend=backend_code)
+        with aset_int as cm_aset_int:
+            for i in range(5000):
                 arrint += 1
-                cm_aset_float[i] = arrfloat
                 cm_aset_int[i] = arrint
         co.commit('first commit')
         co.close()
+        self.co = self.repo.checkout(write=False)
 
-    def setup(self):
-        tmpdir = getcwd()
-        repo = Repository(path=tmpdir, exists=True)
-        self.co = repo.checkout(write=False)
-
-    def teardown(self):
+    def teardown(self, backend):
         self.co.close()
+        self.repo._env._close_environments()
+        rmtree(self.tmpdir)
 
-    def time_read_uint16_2000_samples(self):
+    def time_read_5000_samples(self, backend):
         aset = self.co.arraysets['aset_int']
         with aset as cm_aset:
-            for i in range(2_000):
+            for i in range(5000):
                 arr = cm_aset[i]
 
-    def time_read_float32_2000_samples(self):
-        aset = self.co.arraysets['aset_float']
-        with aset as cm_aset:
-            for i in range(2_000):
-                arr = cm_aset[i]
+    def track_repo_size_5000_samples(self, backend):
+        return folder_size(self.repo._env.repo_path, recurse=True)
 
-    def peakmem_read_uint16_2000_samples(self):
-        aset = self.co.arraysets['aset_int']
-        with aset as cm_aset:
-            for i in range(2_000):
-                arr = cm_aset[i]
-
-    def peakmem_read_float32_2000_samples(self):
-        aset = self.co.arraysets['aset_float']
-        with aset as cm_aset:
-            for i in range(2_000):
-                arr = cm_aset[i]
+    track_repo_size_5000_samples.unit = 'bytes'
 
 
-class NUMPY_10(object):
+class FLOAT32_DType(object):
 
-    processes = 1
-    number = 1
-    repeat = 1
-    warmup_time = 0.00000001
+    params = ['hdf5_00', 'numpy_10']
+    param_names = ['backend']
+    processes = 2
+    number = 2
+    repeat = 2
+    warmup_time = 0
 
-    def setup_cache(self):
-        tmpdir = getcwd()
-        repo = Repository(path=tmpdir, exists=False)
-        repo.init('tester', 'foo@test.bar', remove_old=True)
-        co = repo.checkout(write=True)
+    def setup(self, backend):
+        self.tmpdir = mkdtemp()
+        self.repo = Repository(path=self.tmpdir, exists=False)
+        self.repo.init('tester', 'foo@test.bar', remove_old=True)
+        co = self.repo.checkout(write=True)
 
-        aint = np.hamming(250).reshape(250, 1)
-        bint = np.hamming(250).reshape(1, 250)
-        cint = np.round(aint * bint * 1000).astype(np.uint16)
-        arrint = np.zeros((250, 250, 3), dtype=cint.dtype)
-        arrint[:, :, 0] = cint
-        arrint[:, :, 1] = cint + 1
-        arrint[:, :, 2] = cint + 2
-
-        afloat = np.hamming(250).reshape(250, 1).astype(np.float32)
-        bfloat = np.hamming(250).reshape(1, 250).astype(np.float32)
+        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)
+        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)
         cfloat = np.round(afloat * bfloat * 1000)
-        arrfloat = np.zeros((250, 250, 3), dtype=cfloat.dtype)
-        arrfloat[:, :, 0] = cfloat
-        arrfloat[:, :, 1] = cfloat + 1
-        arrfloat[:, :, 2] = cfloat + 2
+        arrfloat = np.zeros((100, 100), dtype=cfloat.dtype)
+        arrfloat[:, :] = cfloat
+
+        backend_code = backend[-2:]
         try:
-            aset_int = co.arraysets.init_arrayset(
-                'aset_int', prototype=arrint, backend_opts='10')
             aset_float = co.arraysets.init_arrayset(
-                'aset_float', prototype=arrfloat, backend_opts='10')
+                'aset_float', prototype=arrfloat, backend_opts=backend_code)
         except TypeError:
-            aset_int = co.arraysets.init_arrayset(
-                'aset_int', prototype=arrint, backend='10')
             aset_float = co.arraysets.init_arrayset(
-                'aset_float', prototype=arrfloat, backend='10')
-        with aset_int as cm_aset_int, aset_float as cm_aset_float:
-            for i in range(2_000):
+                'aset_float', prototype=arrfloat, backend=backend_code)
+        with aset_float as cm_aset_float:
+            for i in range(5000):
                 arrfloat += 1
-                arrint += 1
                 cm_aset_float[i] = arrfloat
-                cm_aset_int[i] = arrint
         co.commit('first commit')
         co.close()
+        self.co = self.repo.checkout(write=False)
 
-    def setup(self):
-        tmpdir = getcwd()
-        repo = Repository(path=tmpdir, exists=False)
-        self.co = repo.checkout(write=False)
-
-    def teardown(self):
+    def teardown(self, backend):
         self.co.close()
+        self.repo._env._close_environments()
+        rmtree(self.tmpdir)
 
-    def time_read_uint16_2000_samples(self):
-        aset = self.co.arraysets['aset_int']
-        with aset as cm_aset:
-            for i in range(2_000):
-                arr = cm_aset[i]
-
-    def time_read_float32_2000_samples(self):
+    def time_read_5000_samples(self, backend):
         aset = self.co.arraysets['aset_float']
         with aset as cm_aset:
-            for i in range(2_000):
+            for i in range(5000):
                 arr = cm_aset[i]
 
-    def peakmem_read_uint16_2000_samples(self):
-        aset = self.co.arraysets['aset_int']
-        with aset as cm_aset:
-            for i in range(2_000):
-                arr = cm_aset[i]
+    def track_repo_size_5000_samples(self, backend):
+        return folder_size(self.repo._env.repo_path, recurse=True)
 
-    def peakmem_read_float32_2000_samples(self):
-        aset = self.co.arraysets['aset_float']
-        with aset as cm_aset:
-            for i in range(2_000):
-                arr = cm_aset[i]
+    track_repo_size_5000_samples.unit = 'bytes'
