@@ -2,16 +2,15 @@ from tempfile import mkdtemp
 from shutil import rmtree
 import numpy as np
 from hangar import Repository
-from hangar.utils import folder_size
 
 
 class MakeCommit(object):
 
-    params = [(10_000, 30_000, 50_000), (10_000, 30_000, 50_000)]
+    params = [(5_000, 20_000), (5_000, 20_000)]
     param_names = ['num_samples', 'num_metadata']
     processes = 2
     number = 1
-    repeat = (2, 4, 60)
+    repeat = 2
     warmup_time = 0
 
     def setup(self, num_samples, num_metadata):
@@ -46,10 +45,10 @@ class MakeCommit(object):
 
 class CheckoutCommit(object):
 
-    params = [(10_000, 30_000, 50_000), (10_000, 30_000, 50_000)]
+    params = [(5_000, 20_000), (5_000, 20_000)]
     param_names = ['num_samples', 'num_metadata']
     processes = 2
-    number = 3
+    number = 1
     repeat = 2
     warmup_time = 0
 

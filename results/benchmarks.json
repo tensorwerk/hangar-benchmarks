@@ -1,89 +1,61 @@
 {
-    "arrayset_sample_reads.FLOAT32_DType.time_read_5000_samples": {
-        "code": "class FLOAT32_DType:\n    def time_read_5000_samples(self, backend):\n        aset = self.co.arraysets['aset_float']\n        with aset as cm_aset:\n            for i in range(5000):\n                arr = cm_aset[i]\n\n    def setup(self, backend):\n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        cfloat = np.round(afloat * bfloat * 1000)\n        arrfloat = np.zeros((100, 100), dtype=cfloat.dtype)\n        arrfloat[:, :] = cfloat\n    \n        backend_code = backend[-2:]\n        try:\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend_opts=backend_code)\n        except TypeError:\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend=backend_code)\n        with aset_float as cm_aset_float:\n            for i in range(5000):\n                arrfloat += 1\n                cm_aset_float[i] = arrfloat\n        co.commit('first commit')\n        co.close()\n        self.co = self.repo.checkout(write=False)",
+    "arrayset_data.HDF5_00_FLOAT32_Read_1000.time_read": {
+        "code": "class _WriterSuite:\n    def read(self):\n        aset = self.co.arraysets['aset']\n        ks = list(aset.keys())\n        with aset as cm_aset:\n            for i in ks:\n                arr = cm_aset[i]\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
         "min_run_count": 2,
-        "name": "arrayset_sample_reads.FLOAT32_DType.time_read_5000_samples",
-        "number": 2,
-        "param_names": [
-            "backend"
-        ],
-        "params": [
-            [
-                "'hdf5_00'",
-                "'numpy_10'"
-            ]
-        ],
+        "name": "arrayset_data.HDF5_00_FLOAT32_Read_1000.time_read",
+        "number": 1,
+        "param_names": [],
+        "params": [],
         "processes": 2,
         "repeat": 2,
         "sample_time": 0.01,
         "timeout": 60.0,
         "type": "time",
         "unit": "seconds",
-        "version": "b6aab41ff50d8a4fc146242260ceffd73aac6adc02834d9580cff4f1f8012242",
+        "version": "0376a469802174fa20ebc44654173adbaaf74332378ca9bd90dbf0ba8e5a115d",
         "warmup_time": 0
     },
-    "arrayset_sample_reads.FLOAT32_DType.track_repo_size_5000_samples": {
-        "code": "class FLOAT32_DType:\n    def track_repo_size_5000_samples(self, backend):\n        return folder_size(self.repo._env.repo_path, recurse=True)\n\n    def setup(self, backend):\n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        cfloat = np.round(afloat * bfloat * 1000)\n        arrfloat = np.zeros((100, 100), dtype=cfloat.dtype)\n        arrfloat[:, :] = cfloat\n    \n        backend_code = backend[-2:]\n        try:\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend_opts=backend_code)\n        except TypeError:\n            aset_float = co.arraysets.init_arrayset(\n                'aset_float', prototype=arrfloat, backend=backend_code)\n        with aset_float as cm_aset_float:\n            for i in range(5000):\n                arrfloat += 1\n                cm_aset_float[i] = arrfloat\n        co.commit('first commit')\n        co.close()\n        self.co = self.repo.checkout(write=False)",
-        "name": "arrayset_sample_reads.FLOAT32_DType.track_repo_size_5000_samples",
-        "param_names": [
-            "backend"
-        ],
-        "params": [
-            [
-                "'hdf5_00'",
-                "'numpy_10'"
-            ]
-        ],
+    "arrayset_data.HDF5_00_FLOAT32_Read_1000.track_repo_size": {
+        "code": "class _WriterSuite:\n    def size(self):\n        return folder_size(self.repo._env.repo_path, recurse=True)\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
+        "name": "arrayset_data.HDF5_00_FLOAT32_Read_1000.track_repo_size",
+        "param_names": [],
+        "params": [],
         "timeout": 60.0,
         "type": "track",
         "unit": "bytes",
-        "version": "d348ac28224d4675bcbb34ed2708a7b06599511326dce84ac245a38b1e113f81"
+        "version": "6960b62137af29ba9bcf7fd6f3e20f82609acc70952c48e0133d0345b1ffddbe"
     },
-    "arrayset_sample_reads.UINT16_DType.time_read_5000_samples": {
-        "code": "class UINT16_DType:\n    def time_read_5000_samples(self, backend):\n        aset = self.co.arraysets['aset_int']\n        with aset as cm_aset:\n            for i in range(5000):\n                arr = cm_aset[i]\n\n    def setup(self, backend):\n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        cint = np.round(aint * bint * 1000).astype(np.uint16)\n        arrint = np.zeros((100, 100), dtype=cint.dtype)\n        arrint[:, :] = cint\n    \n        backend_code = backend[-2:]\n        try:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend_opts=backend_code)\n        except TypeError:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend=backend_code)\n        with aset_int as cm_aset_int:\n            for i in range(5000):\n                arrint += 1\n                cm_aset_int[i] = arrint\n        co.commit('first commit')\n        co.close()\n        self.co = self.repo.checkout(write=False)",
+    "arrayset_data.HDF5_00_FLOAT32_Read_5000.time_read": {
+        "code": "class _WriterSuite:\n    def read(self):\n        aset = self.co.arraysets['aset']\n        ks = list(aset.keys())\n        with aset as cm_aset:\n            for i in ks:\n                arr = cm_aset[i]\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
         "min_run_count": 2,
-        "name": "arrayset_sample_reads.UINT16_DType.time_read_5000_samples",
-        "number": 2,
-        "param_names": [
-            "backend"
-        ],
-        "params": [
-            [
-                "'hdf5_00'",
-                "'numpy_10'"
-            ]
-        ],
+        "name": "arrayset_data.HDF5_00_FLOAT32_Read_5000.time_read",
+        "number": 1,
+        "param_names": [],
+        "params": [],
         "processes": 2,
         "repeat": 2,
         "sample_time": 0.01,
         "timeout": 60.0,
         "type": "time",
         "unit": "seconds",
-        "version": "9d5973d7c4e4c2958dd1d8ee671be24408f3d7ef4deff983fe82b59b13610575",
+        "version": "0376a469802174fa20ebc44654173adbaaf74332378ca9bd90dbf0ba8e5a115d",
         "warmup_time": 0
     },
-    "arrayset_sample_reads.UINT16_DType.track_repo_size_5000_samples": {
-        "code": "class UINT16_DType:\n    def track_repo_size_5000_samples(self, backend):\n        return folder_size(self.repo._env.repo_path, recurse=True)\n\n    def setup(self, backend):\n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        cint = np.round(aint * bint * 1000).astype(np.uint16)\n        arrint = np.zeros((100, 100), dtype=cint.dtype)\n        arrint[:, :] = cint\n    \n        backend_code = backend[-2:]\n        try:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend_opts=backend_code)\n        except TypeError:\n            aset_int = co.arraysets.init_arrayset(\n                'aset_int', prototype=arrint, backend=backend_code)\n        with aset_int as cm_aset_int:\n            for i in range(5000):\n                arrint += 1\n                cm_aset_int[i] = arrint\n        co.commit('first commit')\n        co.close()\n        self.co = self.repo.checkout(write=False)",
-        "name": "arrayset_sample_reads.UINT16_DType.track_repo_size_5000_samples",
-        "param_names": [
-            "backend"
-        ],
-        "params": [
-            [
-                "'hdf5_00'",
-                "'numpy_10'"
-            ]
-        ],
+    "arrayset_data.HDF5_00_FLOAT32_Read_5000.track_repo_size": {
+        "code": "class _WriterSuite:\n    def size(self):\n        return folder_size(self.repo._env.repo_path, recurse=True)\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
+        "name": "arrayset_data.HDF5_00_FLOAT32_Read_5000.track_repo_size",
+        "param_names": [],
+        "params": [],
         "timeout": 60.0,
         "type": "track",
         "unit": "bytes",
-        "version": "a150b1affa692426196e1d59df96529eaab56371d38c9294fed1f1819c258786"
+        "version": "6960b62137af29ba9bcf7fd6f3e20f82609acc70952c48e0133d0345b1ffddbe"
     },
-    "arrayset_sample_writes.HDF5_00.time_add_float32_5000_samples": {
-        "code": "class HDF5_00:\n    def time_add_float32_5000_samples(self):\n        arr = np.copy(self.arrfloat)\n        with self.aset_float as cm_aset:\n            nsamp = len(cm_aset)\n            arr += nsamp\n            for i in range(5000):\n                cm_aset[i] = arr + i\n\n    def setup(self):\n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        cint = np.round(aint * bint * 1000).astype(np.uint16)\n        self.arrint = np.zeros((100, 100), dtype=cint.dtype)\n        self.arrint[:, :] = cint\n    \n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        cfloat = np.round(afloat * bfloat * 1000)\n        self.arrfloat = np.zeros((100, 100), dtype=cfloat.dtype)\n        self.arrfloat[:, :] = cfloat\n        try:\n            self.aset_int = self.co.arraysets.init_arrayset(\n                'aset_int', prototype=self.arrint, backend_opts='00')\n            self.aset_float = self.co.arraysets.init_arrayset(\n                'aset_float', prototype=self.arrfloat, backend_opts='00')\n        except TypeError:\n            self.aset_int = self.co.arraysets.init_arrayset(\n                'aset_int', prototype=self.arrint, backend='00')\n            self.aset_float = self.co.arraysets.init_arrayset(\n                'aset_float', prototype=self.arrfloat, backend='00')",
+    "arrayset_data.HDF5_00_FLOAT32_Write_1000.time_write": {
+        "code": "class _WriterSuite:\n    def write(self):\n        arr = self.arr\n        aset = self.co.arraysets['aset']\n        with aset as cm_aset:\n            for i in range(self.num_samples):\n                arr += 1\n                cm_aset[i] = arr\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
         "min_run_count": 2,
-        "name": "arrayset_sample_writes.HDF5_00.time_add_float32_5000_samples",
-        "number": 2,
+        "name": "arrayset_data.HDF5_00_FLOAT32_Write_1000.time_write",
+        "number": 1,
         "param_names": [],
         "params": [],
         "processes": 2,
@@ -92,14 +64,14 @@
         "timeout": 60.0,
         "type": "time",
         "unit": "seconds",
-        "version": "a52778027f5ed4095e282b39a5f9693ef62a1b5d2ed592adabed6cce152f3cdf",
+        "version": "6467105a6b41983a055a099f2834775ec4b37844f24aa1563af89c059b6c96f1",
         "warmup_time": 0
     },
-    "arrayset_sample_writes.HDF5_00.time_add_uint16_5000_samples": {
-        "code": "class HDF5_00:\n    def time_add_uint16_5000_samples(self):\n        arr = np.copy(self.arrint)\n        with self.aset_int as cm_aset:\n            nsamp = len(cm_aset)\n            arr += nsamp\n            for i in range(5000):\n                cm_aset[i] = arr + i\n\n    def setup(self):\n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        cint = np.round(aint * bint * 1000).astype(np.uint16)\n        self.arrint = np.zeros((100, 100), dtype=cint.dtype)\n        self.arrint[:, :] = cint\n    \n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        cfloat = np.round(afloat * bfloat * 1000)\n        self.arrfloat = np.zeros((100, 100), dtype=cfloat.dtype)\n        self.arrfloat[:, :] = cfloat\n        try:\n            self.aset_int = self.co.arraysets.init_arrayset(\n                'aset_int', prototype=self.arrint, backend_opts='00')\n            self.aset_float = self.co.arraysets.init_arrayset(\n                'aset_float', prototype=self.arrfloat, backend_opts='00')\n        except TypeError:\n            self.aset_int = self.co.arraysets.init_arrayset(\n                'aset_int', prototype=self.arrint, backend='00')\n            self.aset_float = self.co.arraysets.init_arrayset(\n                'aset_float', prototype=self.arrfloat, backend='00')",
+    "arrayset_data.HDF5_00_FLOAT32_Write_5000.time_write": {
+        "code": "class _WriterSuite:\n    def write(self):\n        arr = self.arr\n        aset = self.co.arraysets['aset']\n        with aset as cm_aset:\n            for i in range(self.num_samples):\n                arr += 1\n                cm_aset[i] = arr\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
         "min_run_count": 2,
-        "name": "arrayset_sample_writes.HDF5_00.time_add_uint16_5000_samples",
-        "number": 2,
+        "name": "arrayset_data.HDF5_00_FLOAT32_Write_5000.time_write",
+        "number": 1,
         "param_names": [],
         "params": [],
         "processes": 2,
@@ -108,14 +80,14 @@
         "timeout": 60.0,
         "type": "time",
         "unit": "seconds",
-        "version": "9c8bffe12eef86f751e23bb96d599baf70900caa32ca21eabe24e30c61b70cfa",
+        "version": "6467105a6b41983a055a099f2834775ec4b37844f24aa1563af89c059b6c96f1",
         "warmup_time": 0
     },
-    "arrayset_sample_writes.NUMPY_10.time_add_float32_5000_samples": {
-        "code": "class NUMPY_10:\n    def time_add_float32_5000_samples(self):\n        arr = np.copy(self.arrfloat)\n        with self.aset_float as cm_aset:\n            nsamp = len(cm_aset)\n            arr += nsamp\n            for i in range(5000):\n                cm_aset[i] = arr + i\n\n    def setup(self):\n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        cint = np.round(aint * bint * 1000).astype(np.uint16)\n        self.arrint = np.zeros((100, 100), dtype=cint.dtype)\n        self.arrint[:, :] = cint\n    \n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        cfloat = np.round(afloat * bfloat * 1000)\n        self.arrfloat = np.zeros((100, 100), dtype=cfloat.dtype)\n        self.arrfloat[:, :] = cfloat\n        try:\n            self.aset_int = self.co.arraysets.init_arrayset(\n                'aset_int', prototype=self.arrint, backend_opts='10')\n            self.aset_float = self.co.arraysets.init_arrayset(\n                'aset_float', prototype=self.arrfloat, backend_opts='10')\n        except TypeError:\n            self.aset_int = self.co.arraysets.init_arrayset(\n                'aset_int', prototype=self.arrint, backend='10')\n            self.aset_float = self.co.arraysets.init_arrayset(\n                'aset_float', prototype=self.arrfloat, backend='10')",
+    "arrayset_data.HDF5_00_UINT16_Read_1000.time_read": {
+        "code": "class _WriterSuite:\n    def read(self):\n        aset = self.co.arraysets['aset']\n        ks = list(aset.keys())\n        with aset as cm_aset:\n            for i in ks:\n                arr = cm_aset[i]\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
         "min_run_count": 2,
-        "name": "arrayset_sample_writes.NUMPY_10.time_add_float32_5000_samples",
-        "number": 2,
+        "name": "arrayset_data.HDF5_00_UINT16_Read_1000.time_read",
+        "number": 1,
         "param_names": [],
         "params": [],
         "processes": 2,
@@ -124,14 +96,24 @@
         "timeout": 60.0,
         "type": "time",
         "unit": "seconds",
-        "version": "b0ac24dd7069d8e78c9423b6147e9aa3dc94baa7c7b4ed01b7a289d35e1ad735",
+        "version": "0376a469802174fa20ebc44654173adbaaf74332378ca9bd90dbf0ba8e5a115d",
         "warmup_time": 0
     },
-    "arrayset_sample_writes.NUMPY_10.time_add_uint16_5000_samples": {
-        "code": "class NUMPY_10:\n    def time_add_uint16_5000_samples(self):\n        arr = np.copy(self.arrint)\n        with self.aset_int as cm_aset:\n            nsamp = len(cm_aset)\n            arr += nsamp\n            for i in range(5000):\n                cm_aset[i] = arr + i\n\n    def setup(self):\n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        aint = np.hamming(100).reshape(100, 1)\n        bint = np.hamming(100).reshape(1, 100)\n        cint = np.round(aint * bint * 1000).astype(np.uint16)\n        self.arrint = np.zeros((100, 100), dtype=cint.dtype)\n        self.arrint[:, :] = cint\n    \n        afloat = np.hamming(100).reshape(100, 1).astype(np.float32)\n        bfloat = np.hamming(100).reshape(1, 100).astype(np.float32)\n        cfloat = np.round(afloat * bfloat * 1000)\n        self.arrfloat = np.zeros((100, 100), dtype=cfloat.dtype)\n        self.arrfloat[:, :] = cfloat\n        try:\n            self.aset_int = self.co.arraysets.init_arrayset(\n                'aset_int', prototype=self.arrint, backend_opts='10')\n            self.aset_float = self.co.arraysets.init_arrayset(\n                'aset_float', prototype=self.arrfloat, backend_opts='10')\n        except TypeError:\n            self.aset_int = self.co.arraysets.init_arrayset(\n                'aset_int', prototype=self.arrint, backend='10')\n            self.aset_float = self.co.arraysets.init_arrayset(\n                'aset_float', prototype=self.arrfloat, backend='10')",
+    "arrayset_data.HDF5_00_UINT16_Read_1000.track_repo_size": {
+        "code": "class _WriterSuite:\n    def size(self):\n        return folder_size(self.repo._env.repo_path, recurse=True)\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
+        "name": "arrayset_data.HDF5_00_UINT16_Read_1000.track_repo_size",
+        "param_names": [],
+        "params": [],
+        "timeout": 60.0,
+        "type": "track",
+        "unit": "bytes",
+        "version": "6960b62137af29ba9bcf7fd6f3e20f82609acc70952c48e0133d0345b1ffddbe"
+    },
+    "arrayset_data.HDF5_00_UINT16_Read_5000.time_read": {
+        "code": "class _WriterSuite:\n    def read(self):\n        aset = self.co.arraysets['aset']\n        ks = list(aset.keys())\n        with aset as cm_aset:\n            for i in ks:\n                arr = cm_aset[i]\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
         "min_run_count": 2,
-        "name": "arrayset_sample_writes.NUMPY_10.time_add_uint16_5000_samples",
-        "number": 2,
+        "name": "arrayset_data.HDF5_00_UINT16_Read_5000.time_read",
+        "number": 1,
         "param_names": [],
         "params": [],
         "processes": 2,
@@ -140,28 +122,236 @@
         "timeout": 60.0,
         "type": "time",
         "unit": "seconds",
-        "version": "7855240879d613c487cb97967ad79ab3f459e614d0ccae4ee6e95196ffce895d",
+        "version": "0376a469802174fa20ebc44654173adbaaf74332378ca9bd90dbf0ba8e5a115d",
+        "warmup_time": 0
+    },
+    "arrayset_data.HDF5_00_UINT16_Read_5000.track_repo_size": {
+        "code": "class _WriterSuite:\n    def size(self):\n        return folder_size(self.repo._env.repo_path, recurse=True)\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
+        "name": "arrayset_data.HDF5_00_UINT16_Read_5000.track_repo_size",
+        "param_names": [],
+        "params": [],
+        "timeout": 60.0,
+        "type": "track",
+        "unit": "bytes",
+        "version": "6960b62137af29ba9bcf7fd6f3e20f82609acc70952c48e0133d0345b1ffddbe"
+    },
+    "arrayset_data.HDF5_00_UINT16_Write_1000.time_write": {
+        "code": "class _WriterSuite:\n    def write(self):\n        arr = self.arr\n        aset = self.co.arraysets['aset']\n        with aset as cm_aset:\n            for i in range(self.num_samples):\n                arr += 1\n                cm_aset[i] = arr\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
+        "min_run_count": 2,
+        "name": "arrayset_data.HDF5_00_UINT16_Write_1000.time_write",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "repeat": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "6467105a6b41983a055a099f2834775ec4b37844f24aa1563af89c059b6c96f1",
+        "warmup_time": 0
+    },
+    "arrayset_data.HDF5_00_UINT16_Write_5000.time_write": {
+        "code": "class _WriterSuite:\n    def write(self):\n        arr = self.arr\n        aset = self.co.arraysets['aset']\n        with aset as cm_aset:\n            for i in range(self.num_samples):\n                arr += 1\n                cm_aset[i] = arr\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
+        "min_run_count": 2,
+        "name": "arrayset_data.HDF5_00_UINT16_Write_5000.time_write",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "repeat": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "6467105a6b41983a055a099f2834775ec4b37844f24aa1563af89c059b6c96f1",
+        "warmup_time": 0
+    },
+    "arrayset_data.NUMPY_10_FLOAT32_Read_1000.time_read": {
+        "code": "class _WriterSuite:\n    def read(self):\n        aset = self.co.arraysets['aset']\n        ks = list(aset.keys())\n        with aset as cm_aset:\n            for i in ks:\n                arr = cm_aset[i]\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
+        "min_run_count": 2,
+        "name": "arrayset_data.NUMPY_10_FLOAT32_Read_1000.time_read",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "repeat": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "0376a469802174fa20ebc44654173adbaaf74332378ca9bd90dbf0ba8e5a115d",
+        "warmup_time": 0
+    },
+    "arrayset_data.NUMPY_10_FLOAT32_Read_1000.track_repo_size": {
+        "code": "class _WriterSuite:\n    def size(self):\n        return folder_size(self.repo._env.repo_path, recurse=True)\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
+        "name": "arrayset_data.NUMPY_10_FLOAT32_Read_1000.track_repo_size",
+        "param_names": [],
+        "params": [],
+        "timeout": 60.0,
+        "type": "track",
+        "unit": "bytes",
+        "version": "6960b62137af29ba9bcf7fd6f3e20f82609acc70952c48e0133d0345b1ffddbe"
+    },
+    "arrayset_data.NUMPY_10_FLOAT32_Read_5000.time_read": {
+        "code": "class _WriterSuite:\n    def read(self):\n        aset = self.co.arraysets['aset']\n        ks = list(aset.keys())\n        with aset as cm_aset:\n            for i in ks:\n                arr = cm_aset[i]\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
+        "min_run_count": 2,
+        "name": "arrayset_data.NUMPY_10_FLOAT32_Read_5000.time_read",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "repeat": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "0376a469802174fa20ebc44654173adbaaf74332378ca9bd90dbf0ba8e5a115d",
+        "warmup_time": 0
+    },
+    "arrayset_data.NUMPY_10_FLOAT32_Read_5000.track_repo_size": {
+        "code": "class _WriterSuite:\n    def size(self):\n        return folder_size(self.repo._env.repo_path, recurse=True)\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
+        "name": "arrayset_data.NUMPY_10_FLOAT32_Read_5000.track_repo_size",
+        "param_names": [],
+        "params": [],
+        "timeout": 60.0,
+        "type": "track",
+        "unit": "bytes",
+        "version": "6960b62137af29ba9bcf7fd6f3e20f82609acc70952c48e0133d0345b1ffddbe"
+    },
+    "arrayset_data.NUMPY_10_FLOAT32_Write_1000.time_write": {
+        "code": "class _WriterSuite:\n    def write(self):\n        arr = self.arr\n        aset = self.co.arraysets['aset']\n        with aset as cm_aset:\n            for i in range(self.num_samples):\n                arr += 1\n                cm_aset[i] = arr\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
+        "min_run_count": 2,
+        "name": "arrayset_data.NUMPY_10_FLOAT32_Write_1000.time_write",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "repeat": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "6467105a6b41983a055a099f2834775ec4b37844f24aa1563af89c059b6c96f1",
+        "warmup_time": 0
+    },
+    "arrayset_data.NUMPY_10_FLOAT32_Write_5000.time_write": {
+        "code": "class _WriterSuite:\n    def write(self):\n        arr = self.arr\n        aset = self.co.arraysets['aset']\n        with aset as cm_aset:\n            for i in range(self.num_samples):\n                arr += 1\n                cm_aset[i] = arr\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
+        "min_run_count": 2,
+        "name": "arrayset_data.NUMPY_10_FLOAT32_Write_5000.time_write",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "repeat": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "6467105a6b41983a055a099f2834775ec4b37844f24aa1563af89c059b6c96f1",
+        "warmup_time": 0
+    },
+    "arrayset_data.NUMPY_10_UINT16_Read_1000.time_read": {
+        "code": "class _WriterSuite:\n    def read(self):\n        aset = self.co.arraysets['aset']\n        ks = list(aset.keys())\n        with aset as cm_aset:\n            for i in ks:\n                arr = cm_aset[i]\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
+        "min_run_count": 2,
+        "name": "arrayset_data.NUMPY_10_UINT16_Read_1000.time_read",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "repeat": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "0376a469802174fa20ebc44654173adbaaf74332378ca9bd90dbf0ba8e5a115d",
+        "warmup_time": 0
+    },
+    "arrayset_data.NUMPY_10_UINT16_Read_1000.track_repo_size": {
+        "code": "class _WriterSuite:\n    def size(self):\n        return folder_size(self.repo._env.repo_path, recurse=True)\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
+        "name": "arrayset_data.NUMPY_10_UINT16_Read_1000.track_repo_size",
+        "param_names": [],
+        "params": [],
+        "timeout": 60.0,
+        "type": "track",
+        "unit": "bytes",
+        "version": "6960b62137af29ba9bcf7fd6f3e20f82609acc70952c48e0133d0345b1ffddbe"
+    },
+    "arrayset_data.NUMPY_10_UINT16_Read_5000.time_read": {
+        "code": "class _WriterSuite:\n    def read(self):\n        aset = self.co.arraysets['aset']\n        ks = list(aset.keys())\n        with aset as cm_aset:\n            for i in ks:\n                arr = cm_aset[i]\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
+        "min_run_count": 2,
+        "name": "arrayset_data.NUMPY_10_UINT16_Read_5000.time_read",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "repeat": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "0376a469802174fa20ebc44654173adbaaf74332378ca9bd90dbf0ba8e5a115d",
+        "warmup_time": 0
+    },
+    "arrayset_data.NUMPY_10_UINT16_Read_5000.track_repo_size": {
+        "code": "class _WriterSuite:\n    def size(self):\n        return folder_size(self.repo._env.repo_path, recurse=True)\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
+        "name": "arrayset_data.NUMPY_10_UINT16_Read_5000.track_repo_size",
+        "param_names": [],
+        "params": [],
+        "timeout": 60.0,
+        "type": "track",
+        "unit": "bytes",
+        "version": "6960b62137af29ba9bcf7fd6f3e20f82609acc70952c48e0133d0345b1ffddbe"
+    },
+    "arrayset_data.NUMPY_10_UINT16_Write_1000.time_write": {
+        "code": "class _WriterSuite:\n    def write(self):\n        arr = self.arr\n        aset = self.co.arraysets['aset']\n        with aset as cm_aset:\n            for i in range(self.num_samples):\n                arr += 1\n                cm_aset[i] = arr\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
+        "min_run_count": 2,
+        "name": "arrayset_data.NUMPY_10_UINT16_Write_1000.time_write",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "repeat": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "6467105a6b41983a055a099f2834775ec4b37844f24aa1563af89c059b6c96f1",
+        "warmup_time": 0
+    },
+    "arrayset_data.NUMPY_10_UINT16_Write_5000.time_write": {
+        "code": "class _WriterSuite:\n    def write(self):\n        arr = self.arr\n        aset = self.co.arraysets['aset']\n        with aset as cm_aset:\n            for i in range(self.num_samples):\n                arr += 1\n                cm_aset[i] = arr\n\n    def setup(self):\n    \n        # self.method\n        # self.backend\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00'\n        }\n        # self.dtype\n        self.type_code = {\n            'float32': np.float32,\n            'uint16': np.uint16,\n        }\n        # self.num_samples\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        co = self.repo.checkout(write=True)\n    \n        a = np.hamming(100).reshape(100, 1)\n        b = np.hamming(100).reshape(1, 100)\n        c = np.round(a * b * 1000).astype(self.type_code[self.dtype])\n        arr = np.zeros((100, 100), dtype=c.dtype)\n        arr[:, :] = c\n    \n        try:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[self.backend])\n        except TypeError:\n            aset = co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[self.backend])\n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            co.commit('first commit')\n            co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr\n            self.co = co",
+        "min_run_count": 2,
+        "name": "arrayset_data.NUMPY_10_UINT16_Write_5000.time_write",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "repeat": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "6467105a6b41983a055a099f2834775ec4b37844f24aa1563af89c059b6c96f1",
         "warmup_time": 0
     },
     "commit_and_checkout.CheckoutCommit.time_checkout_read_only": {
         "code": "class CheckoutCommit:\n    def time_checkout_read_only(self, num_samples, num_metadata):\n        self.co = self.repo.checkout(write=False)\n\n    def setup(self, num_samples, num_metadata):\n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n        arr = np.array([0,], dtype=np.uint8)\n        try:\n            aset = self.co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts='10')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend='10')\n    \n        with aset as cm_aset:\n            for i in range(num_samples):\n                arr[:] = i % 255\n                cm_aset[i] = arr\n        with self.co.metadata as cm_meta:\n            for i in range(num_metadata):\n                cm_meta[i] = f'{i % 500} data'\n        self.co.commit('first')\n        self.co.close()\n        self.co = None",
         "min_run_count": 2,
         "name": "commit_and_checkout.CheckoutCommit.time_checkout_read_only",
-        "number": 3,
+        "number": 1,
         "param_names": [
             "num_samples",
             "num_metadata"
         ],
         "params": [
             [
-                "10000",
-                "30000",
-                "50000"
+                "5000",
+                "20000"
             ],
             [
-                "10000",
-                "30000",
-                "50000"
+                "5000",
+                "20000"
             ]
         ],
         "processes": 2,
@@ -177,21 +367,19 @@
         "code": "class CheckoutCommit:\n    def time_checkout_write_enabled(self, num_samples, num_metadata):\n        self.co = self.repo.checkout(write=True)\n        self.co.close()\n\n    def setup(self, num_samples, num_metadata):\n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n        arr = np.array([0,], dtype=np.uint8)\n        try:\n            aset = self.co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts='10')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend='10')\n    \n        with aset as cm_aset:\n            for i in range(num_samples):\n                arr[:] = i % 255\n                cm_aset[i] = arr\n        with self.co.metadata as cm_meta:\n            for i in range(num_metadata):\n                cm_meta[i] = f'{i % 500} data'\n        self.co.commit('first')\n        self.co.close()\n        self.co = None",
         "min_run_count": 2,
         "name": "commit_and_checkout.CheckoutCommit.time_checkout_write_enabled",
-        "number": 3,
+        "number": 1,
         "param_names": [
             "num_samples",
             "num_metadata"
         ],
         "params": [
             [
-                "10000",
-                "30000",
-                "50000"
+                "5000",
+                "20000"
             ],
             [
-                "10000",
-                "30000",
-                "50000"
+                "5000",
+                "20000"
             ]
         ],
         "processes": 2,
@@ -214,17 +402,16 @@
         ],
         "params": [
             [
-                "10000",
-                "30000",
-                "50000"
+                "5000",
+                "20000"
             ],
             [
-                "10000",
-                "30000",
-                "50000"
+                "5000",
+                "20000"
             ]
         ],
         "processes": 2,
+        "repeat": 2,
         "sample_time": 0.01,
         "timeout": 60.0,
         "type": "time",
