@@ -1,0 +1,404 @@
+{
+    "backend_comparisons.Read_50by50by25_3000_samples.time_read": {
+        "code": "class _WriterSuite:\n    def read(self, backend):\n        aset = self.co.arraysets['aset']\n        ks = list(aset.keys())\n        with aset as cm_aset:\n            for i in ks:\n                arr = cm_aset[i]\n\n    def setup(self, backend):\n    \n        # self.method\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00',\n            'hdf5_01': '01',\n        }\n        # self.num_samples\n    \n        self.sample_shape = (50, 50, 25)\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        component_arrays = []\n        ndims = len(self.sample_shape)\n        for idx, shape in enumerate(self.sample_shape):\n            layout = [1 for i in range(ndims)]\n            layout[idx] = shape\n            component = np.hamming(shape).reshape(*layout) * 100\n            component_arrays.append(component.astype(np.float32))\n        arr = np.prod(component_arrays).astype(np.float32)\n    \n        try:\n            aset = self.co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[backend])\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[backend])\n        except ValueError:\n            raise NotImplementedError\n    \n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            self.co.commit('first commit')\n            self.co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr",
+        "min_run_count": 2,
+        "name": "backend_comparisons.Read_50by50by25_3000_samples.time_read",
+        "number": 1,
+        "param_names": [
+            "backend"
+        ],
+        "params": [
+            [
+                "'hdf5_00'",
+                "'hdf5_01'",
+                "'numpy_10'"
+            ]
+        ],
+        "processes": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "61c608c452e183ee24619c5eb5a7204b601a0c445e7b1818ba29e11396ec390e",
+        "warmup_time": 0
+    },
+    "backend_comparisons.Write_50by50by25_300_samples.time_write": {
+        "code": "class _WriterSuite:\n    def write(self, backend):\n        arr = self.arr\n        aset = self.co.arraysets['aset']\n        with aset as cm_aset:\n            for i in range(self.num_samples):\n                arr += 1\n                cm_aset[i] = arr\n\n    def setup(self, backend):\n    \n        # self.method\n        self.backend_code = {\n            'numpy_10': '10',\n            'hdf5_00': '00',\n            'hdf5_01': '01',\n        }\n        # self.num_samples\n    \n        self.sample_shape = (50, 50, 25)\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        component_arrays = []\n        ndims = len(self.sample_shape)\n        for idx, shape in enumerate(self.sample_shape):\n            layout = [1 for i in range(ndims)]\n            layout[idx] = shape\n            component = np.hamming(shape).reshape(*layout) * 100\n            component_arrays.append(component.astype(np.float32))\n        arr = np.prod(component_arrays).astype(np.float32)\n    \n        try:\n            aset = self.co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts=self.backend_code[backend])\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend=self.backend_code[backend])\n        except ValueError:\n            raise NotImplementedError\n    \n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            self.co.commit('first commit')\n            self.co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr",
+        "min_run_count": 2,
+        "name": "backend_comparisons.Write_50by50by25_300_samples.time_write",
+        "number": 1,
+        "param_names": [
+            "backend"
+        ],
+        "params": [
+            [
+                "'hdf5_00'",
+                "'hdf5_01'",
+                "'numpy_10'"
+            ]
+        ],
+        "processes": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "6f5dfba63eb49e08a0b93ba492a41ed0f9f0370818a3b9437343eaf0e04ca9af",
+        "warmup_time": 0
+    },
+    "backends.hdf5_00.Read_50by50by10_100_samples.time_read": {
+        "code": "class _WriterSuite_HDF5_00:\n    def read(self):\n        aset = self.co.arraysets['aset']\n        ks = list(aset.keys())\n        with aset as cm_aset:\n            for i in ks:\n                arr = cm_aset[i]\n\n    def setup(self):\n    \n        # self.method\n        # self.num_samples\n        # self.sample_shape\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        component_arrays = []\n        ndims = len(self.sample_shape)\n        for idx, shape in enumerate(self.sample_shape):\n            layout = [1 for i in range(ndims)]\n            layout[idx] = shape\n            component = np.hamming(shape).reshape(*layout) * 100\n            component_arrays.append(component.astype(np.float32))\n        arr = np.prod(component_arrays).astype(np.float32)\n    \n        try:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend='00')\n        except ValueError:\n            # marks as skipped benchmark for commits which do not have this backend.\n            raise NotImplementedError\n    \n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            self.co.commit('first commit')\n            self.co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr",
+        "min_run_count": 2,
+        "name": "backends.hdf5_00.Read_50by50by10_100_samples.time_read",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "0fba1ce6aa9c262ff2dab713c128476c66d719028d1747f94d959414da20d7a2",
+        "warmup_time": 0
+    },
+    "backends.hdf5_00.Read_50by50by10_1_samples.time_read": {
+        "code": "class _WriterSuite_HDF5_00:\n    def read(self):\n        aset = self.co.arraysets['aset']\n        ks = list(aset.keys())\n        with aset as cm_aset:\n            for i in ks:\n                arr = cm_aset[i]\n\n    def setup(self):\n    \n        # self.method\n        # self.num_samples\n        # self.sample_shape\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        component_arrays = []\n        ndims = len(self.sample_shape)\n        for idx, shape in enumerate(self.sample_shape):\n            layout = [1 for i in range(ndims)]\n            layout[idx] = shape\n            component = np.hamming(shape).reshape(*layout) * 100\n            component_arrays.append(component.astype(np.float32))\n        arr = np.prod(component_arrays).astype(np.float32)\n    \n        try:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend='00')\n        except ValueError:\n            # marks as skipped benchmark for commits which do not have this backend.\n            raise NotImplementedError\n    \n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            self.co.commit('first commit')\n            self.co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr",
+        "min_run_count": 2,
+        "name": "backends.hdf5_00.Read_50by50by10_1_samples.time_read",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "0fba1ce6aa9c262ff2dab713c128476c66d719028d1747f94d959414da20d7a2",
+        "warmup_time": 0
+    },
+    "backends.hdf5_00.Read_50by50by10_300_samples.time_read": {
+        "code": "class _WriterSuite_HDF5_00:\n    def read(self):\n        aset = self.co.arraysets['aset']\n        ks = list(aset.keys())\n        with aset as cm_aset:\n            for i in ks:\n                arr = cm_aset[i]\n\n    def setup(self):\n    \n        # self.method\n        # self.num_samples\n        # self.sample_shape\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        component_arrays = []\n        ndims = len(self.sample_shape)\n        for idx, shape in enumerate(self.sample_shape):\n            layout = [1 for i in range(ndims)]\n            layout[idx] = shape\n            component = np.hamming(shape).reshape(*layout) * 100\n            component_arrays.append(component.astype(np.float32))\n        arr = np.prod(component_arrays).astype(np.float32)\n    \n        try:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend='00')\n        except ValueError:\n            # marks as skipped benchmark for commits which do not have this backend.\n            raise NotImplementedError\n    \n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            self.co.commit('first commit')\n            self.co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr",
+        "min_run_count": 2,
+        "name": "backends.hdf5_00.Read_50by50by10_300_samples.time_read",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "0fba1ce6aa9c262ff2dab713c128476c66d719028d1747f94d959414da20d7a2",
+        "warmup_time": 0
+    },
+    "backends.hdf5_00.Read_50by50by10_300_samples.track_repo_size": {
+        "code": "class _WriterSuite_HDF5_00:\n    def size(self):\n        return folder_size(self.repo._env.repo_path, recurse=True)\n\n    def setup(self):\n    \n        # self.method\n        # self.num_samples\n        # self.sample_shape\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        component_arrays = []\n        ndims = len(self.sample_shape)\n        for idx, shape in enumerate(self.sample_shape):\n            layout = [1 for i in range(ndims)]\n            layout[idx] = shape\n            component = np.hamming(shape).reshape(*layout) * 100\n            component_arrays.append(component.astype(np.float32))\n        arr = np.prod(component_arrays).astype(np.float32)\n    \n        try:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend='00')\n        except ValueError:\n            # marks as skipped benchmark for commits which do not have this backend.\n            raise NotImplementedError\n    \n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            self.co.commit('first commit')\n            self.co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr",
+        "name": "backends.hdf5_00.Read_50by50by10_300_samples.track_repo_size",
+        "param_names": [],
+        "params": [],
+        "timeout": 60.0,
+        "type": "track",
+        "unit": "bytes",
+        "version": "77a9c3f5279ffd0d2159331f5b24eccace980c40cb6af62d0e9f6e58fb5393f2"
+    },
+    "backends.hdf5_00.Write_50by50by10_100_samples.time_write": {
+        "code": "class _WriterSuite_HDF5_00:\n    def write(self):\n        arr = self.arr\n        aset = self.co.arraysets['aset']\n        with aset as cm_aset:\n            for i in range(self.num_samples):\n                arr += 1\n                cm_aset[i] = arr\n\n    def setup(self):\n    \n        # self.method\n        # self.num_samples\n        # self.sample_shape\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        component_arrays = []\n        ndims = len(self.sample_shape)\n        for idx, shape in enumerate(self.sample_shape):\n            layout = [1 for i in range(ndims)]\n            layout[idx] = shape\n            component = np.hamming(shape).reshape(*layout) * 100\n            component_arrays.append(component.astype(np.float32))\n        arr = np.prod(component_arrays).astype(np.float32)\n    \n        try:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend='00')\n        except ValueError:\n            # marks as skipped benchmark for commits which do not have this backend.\n            raise NotImplementedError\n    \n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            self.co.commit('first commit')\n            self.co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr",
+        "min_run_count": 2,
+        "name": "backends.hdf5_00.Write_50by50by10_100_samples.time_write",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "f10db6897763c556f57679501beff9682e5ed7f567cceb8ccb78f66c4a680b01",
+        "warmup_time": 0
+    },
+    "backends.hdf5_00.Write_50by50by10_1_samples.time_write": {
+        "code": "class _WriterSuite_HDF5_00:\n    def write(self):\n        arr = self.arr\n        aset = self.co.arraysets['aset']\n        with aset as cm_aset:\n            for i in range(self.num_samples):\n                arr += 1\n                cm_aset[i] = arr\n\n    def setup(self):\n    \n        # self.method\n        # self.num_samples\n        # self.sample_shape\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        component_arrays = []\n        ndims = len(self.sample_shape)\n        for idx, shape in enumerate(self.sample_shape):\n            layout = [1 for i in range(ndims)]\n            layout[idx] = shape\n            component = np.hamming(shape).reshape(*layout) * 100\n            component_arrays.append(component.astype(np.float32))\n        arr = np.prod(component_arrays).astype(np.float32)\n    \n        try:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='00')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend='00')\n        except ValueError:\n            # marks as skipped benchmark for commits which do not have this backend.\n            raise NotImplementedError\n    \n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            self.co.commit('first commit')\n            self.co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr",
+        "min_run_count": 2,
+        "name": "backends.hdf5_00.Write_50by50by10_1_samples.time_write",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "f10db6897763c556f57679501beff9682e5ed7f567cceb8ccb78f66c4a680b01",
+        "warmup_time": 0
+    },
+    "backends.hdf5_01.Read_50by50by10_100_samples.time_read": {
+        "code": "class _WriterSuite_HDF5_01:\n    def read(self):\n        aset = self.co.arraysets['aset']\n        ks = list(aset.keys())\n        with aset as cm_aset:\n            for i in ks:\n                arr = cm_aset[i]\n\n    def setup(self):\n    \n        # self.method\n        # self.num_samples\n        # self.sample_shape\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        component_arrays = []\n        ndims = len(self.sample_shape)\n        for idx, shape in enumerate(self.sample_shape):\n            layout = [1 for i in range(ndims)]\n            layout[idx] = shape\n            component = np.hamming(shape).reshape(*layout) * 100\n            component_arrays.append(component.astype(np.float32))\n        arr = np.prod(component_arrays).astype(np.float32)\n    \n        try:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='01')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend='01')\n        except ValueError:\n            # marks as skipped benchmark for commits which do not have this backend.\n            raise NotImplementedError\n    \n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            self.co.commit('first commit')\n            self.co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr",
+        "min_run_count": 2,
+        "name": "backends.hdf5_01.Read_50by50by10_100_samples.time_read",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "053e8279f609ed6cbb4394dce05a4ba7f7cb4645a5bef637b68a1653ef348c38",
+        "warmup_time": 0
+    },
+    "backends.hdf5_01.Read_50by50by10_1_samples.time_read": {
+        "code": "class _WriterSuite_HDF5_01:\n    def read(self):\n        aset = self.co.arraysets['aset']\n        ks = list(aset.keys())\n        with aset as cm_aset:\n            for i in ks:\n                arr = cm_aset[i]\n\n    def setup(self):\n    \n        # self.method\n        # self.num_samples\n        # self.sample_shape\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        component_arrays = []\n        ndims = len(self.sample_shape)\n        for idx, shape in enumerate(self.sample_shape):\n            layout = [1 for i in range(ndims)]\n            layout[idx] = shape\n            component = np.hamming(shape).reshape(*layout) * 100\n            component_arrays.append(component.astype(np.float32))\n        arr = np.prod(component_arrays).astype(np.float32)\n    \n        try:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='01')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend='01')\n        except ValueError:\n            # marks as skipped benchmark for commits which do not have this backend.\n            raise NotImplementedError\n    \n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            self.co.commit('first commit')\n            self.co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr",
+        "min_run_count": 2,
+        "name": "backends.hdf5_01.Read_50by50by10_1_samples.time_read",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "053e8279f609ed6cbb4394dce05a4ba7f7cb4645a5bef637b68a1653ef348c38",
+        "warmup_time": 0
+    },
+    "backends.hdf5_01.Read_50by50by10_300_samples.time_read": {
+        "code": "class _WriterSuite_HDF5_01:\n    def read(self):\n        aset = self.co.arraysets['aset']\n        ks = list(aset.keys())\n        with aset as cm_aset:\n            for i in ks:\n                arr = cm_aset[i]\n\n    def setup(self):\n    \n        # self.method\n        # self.num_samples\n        # self.sample_shape\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        component_arrays = []\n        ndims = len(self.sample_shape)\n        for idx, shape in enumerate(self.sample_shape):\n            layout = [1 for i in range(ndims)]\n            layout[idx] = shape\n            component = np.hamming(shape).reshape(*layout) * 100\n            component_arrays.append(component.astype(np.float32))\n        arr = np.prod(component_arrays).astype(np.float32)\n    \n        try:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='01')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend='01')\n        except ValueError:\n            # marks as skipped benchmark for commits which do not have this backend.\n            raise NotImplementedError\n    \n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            self.co.commit('first commit')\n            self.co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr",
+        "min_run_count": 2,
+        "name": "backends.hdf5_01.Read_50by50by10_300_samples.time_read",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "053e8279f609ed6cbb4394dce05a4ba7f7cb4645a5bef637b68a1653ef348c38",
+        "warmup_time": 0
+    },
+    "backends.hdf5_01.Read_50by50by10_300_samples.track_repo_size": {
+        "code": "class _WriterSuite_HDF5_01:\n    def size(self):\n        return folder_size(self.repo._env.repo_path, recurse=True)\n\n    def setup(self):\n    \n        # self.method\n        # self.num_samples\n        # self.sample_shape\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        component_arrays = []\n        ndims = len(self.sample_shape)\n        for idx, shape in enumerate(self.sample_shape):\n            layout = [1 for i in range(ndims)]\n            layout[idx] = shape\n            component = np.hamming(shape).reshape(*layout) * 100\n            component_arrays.append(component.astype(np.float32))\n        arr = np.prod(component_arrays).astype(np.float32)\n    \n        try:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='01')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend='01')\n        except ValueError:\n            # marks as skipped benchmark for commits which do not have this backend.\n            raise NotImplementedError\n    \n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            self.co.commit('first commit')\n            self.co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr",
+        "name": "backends.hdf5_01.Read_50by50by10_300_samples.track_repo_size",
+        "param_names": [],
+        "params": [],
+        "timeout": 60.0,
+        "type": "track",
+        "unit": "bytes",
+        "version": "d1aed2878314c67c9c5f861eafe1db2eea05ca03a7c46eecc8e5ad0396614f53"
+    },
+    "backends.hdf5_01.Write_50by50by10_100_samples.time_write": {
+        "code": "class _WriterSuite_HDF5_01:\n    def write(self):\n        arr = self.arr\n        aset = self.co.arraysets['aset']\n        with aset as cm_aset:\n            for i in range(self.num_samples):\n                arr += 1\n                cm_aset[i] = arr\n\n    def setup(self):\n    \n        # self.method\n        # self.num_samples\n        # self.sample_shape\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        component_arrays = []\n        ndims = len(self.sample_shape)\n        for idx, shape in enumerate(self.sample_shape):\n            layout = [1 for i in range(ndims)]\n            layout[idx] = shape\n            component = np.hamming(shape).reshape(*layout) * 100\n            component_arrays.append(component.astype(np.float32))\n        arr = np.prod(component_arrays).astype(np.float32)\n    \n        try:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='01')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend='01')\n        except ValueError:\n            # marks as skipped benchmark for commits which do not have this backend.\n            raise NotImplementedError\n    \n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            self.co.commit('first commit')\n            self.co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr",
+        "min_run_count": 2,
+        "name": "backends.hdf5_01.Write_50by50by10_100_samples.time_write",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "3741630379e8bc514bba524d8cb8ddc05fddc181a7eece45dd2f9ae2104f03c0",
+        "warmup_time": 0
+    },
+    "backends.hdf5_01.Write_50by50by10_1_samples.time_write": {
+        "code": "class _WriterSuite_HDF5_01:\n    def write(self):\n        arr = self.arr\n        aset = self.co.arraysets['aset']\n        with aset as cm_aset:\n            for i in range(self.num_samples):\n                arr += 1\n                cm_aset[i] = arr\n\n    def setup(self):\n    \n        # self.method\n        # self.num_samples\n        # self.sample_shape\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        component_arrays = []\n        ndims = len(self.sample_shape)\n        for idx, shape in enumerate(self.sample_shape):\n            layout = [1 for i in range(ndims)]\n            layout[idx] = shape\n            component = np.hamming(shape).reshape(*layout) * 100\n            component_arrays.append(component.astype(np.float32))\n        arr = np.prod(component_arrays).astype(np.float32)\n    \n        try:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='01')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend='01')\n        except ValueError:\n            # marks as skipped benchmark for commits which do not have this backend.\n            raise NotImplementedError\n    \n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            self.co.commit('first commit')\n            self.co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr",
+        "min_run_count": 2,
+        "name": "backends.hdf5_01.Write_50by50by10_1_samples.time_write",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "3741630379e8bc514bba524d8cb8ddc05fddc181a7eece45dd2f9ae2104f03c0",
+        "warmup_time": 0
+    },
+    "backends.numpy_10.Read_50by50by10_100_samples.time_read": {
+        "code": "class _WriterSuite_NUMPY_10:\n    def read(self):\n        aset = self.co.arraysets['aset']\n        ks = list(aset.keys())\n        with aset as cm_aset:\n            for i in ks:\n                arr = cm_aset[i]\n\n    def setup(self):\n    \n        # self.method\n        # self.num_samples\n        # self.sample_shape\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        component_arrays = []\n        ndims = len(self.sample_shape)\n        for idx, shape in enumerate(self.sample_shape):\n            layout = [1 for i in range(ndims)]\n            layout[idx] = shape\n            component = np.hamming(shape).reshape(*layout) * 100\n            component_arrays.append(component.astype(np.float32))\n        arr = np.prod(component_arrays).astype(np.float32)\n    \n        try:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend='10')\n        except ValueError:\n            # marks as skipped benchmark for commits which do not have this backend.\n            raise NotImplementedError\n    \n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            self.co.commit('first commit')\n            self.co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr",
+        "min_run_count": 2,
+        "name": "backends.numpy_10.Read_50by50by10_100_samples.time_read",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "70912cd6f1ddccba5783829b2db4c34834c6e0fe29c38eb43452193e2c12bc13",
+        "warmup_time": 0
+    },
+    "backends.numpy_10.Read_50by50by10_1_samples.time_read": {
+        "code": "class _WriterSuite_NUMPY_10:\n    def read(self):\n        aset = self.co.arraysets['aset']\n        ks = list(aset.keys())\n        with aset as cm_aset:\n            for i in ks:\n                arr = cm_aset[i]\n\n    def setup(self):\n    \n        # self.method\n        # self.num_samples\n        # self.sample_shape\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        component_arrays = []\n        ndims = len(self.sample_shape)\n        for idx, shape in enumerate(self.sample_shape):\n            layout = [1 for i in range(ndims)]\n            layout[idx] = shape\n            component = np.hamming(shape).reshape(*layout) * 100\n            component_arrays.append(component.astype(np.float32))\n        arr = np.prod(component_arrays).astype(np.float32)\n    \n        try:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend='10')\n        except ValueError:\n            # marks as skipped benchmark for commits which do not have this backend.\n            raise NotImplementedError\n    \n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            self.co.commit('first commit')\n            self.co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr",
+        "min_run_count": 2,
+        "name": "backends.numpy_10.Read_50by50by10_1_samples.time_read",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "70912cd6f1ddccba5783829b2db4c34834c6e0fe29c38eb43452193e2c12bc13",
+        "warmup_time": 0
+    },
+    "backends.numpy_10.Read_50by50by10_300_samples.time_read": {
+        "code": "class _WriterSuite_NUMPY_10:\n    def read(self):\n        aset = self.co.arraysets['aset']\n        ks = list(aset.keys())\n        with aset as cm_aset:\n            for i in ks:\n                arr = cm_aset[i]\n\n    def setup(self):\n    \n        # self.method\n        # self.num_samples\n        # self.sample_shape\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        component_arrays = []\n        ndims = len(self.sample_shape)\n        for idx, shape in enumerate(self.sample_shape):\n            layout = [1 for i in range(ndims)]\n            layout[idx] = shape\n            component = np.hamming(shape).reshape(*layout) * 100\n            component_arrays.append(component.astype(np.float32))\n        arr = np.prod(component_arrays).astype(np.float32)\n    \n        try:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend='10')\n        except ValueError:\n            # marks as skipped benchmark for commits which do not have this backend.\n            raise NotImplementedError\n    \n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            self.co.commit('first commit')\n            self.co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr",
+        "min_run_count": 2,
+        "name": "backends.numpy_10.Read_50by50by10_300_samples.time_read",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "70912cd6f1ddccba5783829b2db4c34834c6e0fe29c38eb43452193e2c12bc13",
+        "warmup_time": 0
+    },
+    "backends.numpy_10.Read_50by50by10_300_samples.track_repo_size": {
+        "code": "class _WriterSuite_NUMPY_10:\n    def size(self):\n        return folder_size(self.repo._env.repo_path, recurse=True)\n\n    def setup(self):\n    \n        # self.method\n        # self.num_samples\n        # self.sample_shape\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        component_arrays = []\n        ndims = len(self.sample_shape)\n        for idx, shape in enumerate(self.sample_shape):\n            layout = [1 for i in range(ndims)]\n            layout[idx] = shape\n            component = np.hamming(shape).reshape(*layout) * 100\n            component_arrays.append(component.astype(np.float32))\n        arr = np.prod(component_arrays).astype(np.float32)\n    \n        try:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend='10')\n        except ValueError:\n            # marks as skipped benchmark for commits which do not have this backend.\n            raise NotImplementedError\n    \n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            self.co.commit('first commit')\n            self.co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr",
+        "name": "backends.numpy_10.Read_50by50by10_300_samples.track_repo_size",
+        "param_names": [],
+        "params": [],
+        "timeout": 60.0,
+        "type": "track",
+        "unit": "bytes",
+        "version": "76a2f8292e8f46638d579ed9dc826f8f0848955ec4391d6a8d29934e1cb9bde6"
+    },
+    "backends.numpy_10.Write_50by50by10_100_samples.time_write": {
+        "code": "class _WriterSuite_NUMPY_10:\n    def write(self):\n        arr = self.arr\n        aset = self.co.arraysets['aset']\n        with aset as cm_aset:\n            for i in range(self.num_samples):\n                arr += 1\n                cm_aset[i] = arr\n\n    def setup(self):\n    \n        # self.method\n        # self.num_samples\n        # self.sample_shape\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        component_arrays = []\n        ndims = len(self.sample_shape)\n        for idx, shape in enumerate(self.sample_shape):\n            layout = [1 for i in range(ndims)]\n            layout[idx] = shape\n            component = np.hamming(shape).reshape(*layout) * 100\n            component_arrays.append(component.astype(np.float32))\n        arr = np.prod(component_arrays).astype(np.float32)\n    \n        try:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend='10')\n        except ValueError:\n            # marks as skipped benchmark for commits which do not have this backend.\n            raise NotImplementedError\n    \n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            self.co.commit('first commit')\n            self.co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr",
+        "min_run_count": 2,
+        "name": "backends.numpy_10.Write_50by50by10_100_samples.time_write",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "9b3d909500afdcc5092f2456d8144e844100137653a28aa5c31c4aaaa8024da3",
+        "warmup_time": 0
+    },
+    "backends.numpy_10.Write_50by50by10_1_samples.time_write": {
+        "code": "class _WriterSuite_NUMPY_10:\n    def write(self):\n        arr = self.arr\n        aset = self.co.arraysets['aset']\n        with aset as cm_aset:\n            for i in range(self.num_samples):\n                arr += 1\n                cm_aset[i] = arr\n\n    def setup(self):\n    \n        # self.method\n        # self.num_samples\n        # self.sample_shape\n    \n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n    \n        component_arrays = []\n        ndims = len(self.sample_shape)\n        for idx, shape in enumerate(self.sample_shape):\n            layout = [1 for i in range(ndims)]\n            layout[idx] = shape\n            component = np.hamming(shape).reshape(*layout) * 100\n            component_arrays.append(component.astype(np.float32))\n        arr = np.prod(component_arrays).astype(np.float32)\n    \n        try:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend_opts='10')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset('aset', prototype=arr, backend='10')\n        except ValueError:\n            # marks as skipped benchmark for commits which do not have this backend.\n            raise NotImplementedError\n    \n        if self.method == 'read':\n            with aset as cm_aset:\n                for i in range(self.num_samples):\n                    arr += 1\n                    cm_aset[i] = arr\n            self.co.commit('first commit')\n            self.co.close()\n            self.co = self.repo.checkout(write=False)\n        else:\n            self.arr = arr",
+        "min_run_count": 2,
+        "name": "backends.numpy_10.Write_50by50by10_1_samples.time_write",
+        "number": 1,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "9b3d909500afdcc5092f2456d8144e844100137653a28aa5c31c4aaaa8024da3",
+        "warmup_time": 0
+    },
+    "commit_and_checkout.CheckoutCommit.time_checkout_read_only": {
+        "code": "class CheckoutCommit:\n    def time_checkout_read_only(self, num_samples, num_metadata):\n        self.co = self.repo.checkout(write=False)\n\n    def setup(self, num_samples, num_metadata):\n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n        arr = np.array([0,], dtype=np.uint8)\n        try:\n            aset = self.co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts='10')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend='10')\n    \n        with aset as cm_aset:\n            for i in range(num_samples):\n                arr[:] = i % 255\n                cm_aset[i] = arr\n        with self.co.metadata as cm_meta:\n            for i in range(num_metadata):\n                cm_meta[i] = f'{i % 500} data'\n        self.co.commit('first')\n        self.co.close()\n        self.co = None",
+        "min_run_count": 2,
+        "name": "commit_and_checkout.CheckoutCommit.time_checkout_read_only",
+        "number": 1,
+        "param_names": [
+            "num_samples",
+            "num_metadata"
+        ],
+        "params": [
+            [
+                "5000",
+                "20000"
+            ],
+            [
+                "5000",
+                "20000"
+            ]
+        ],
+        "processes": 2,
+        "repeat": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "f1d7c20ba29c0211d45f4f99ec71177ab039f8b4be210e402acfc3450a5062f1",
+        "warmup_time": 0
+    },
+    "commit_and_checkout.CheckoutCommit.time_checkout_write_enabled": {
+        "code": "class CheckoutCommit:\n    def time_checkout_write_enabled(self, num_samples, num_metadata):\n        self.co = self.repo.checkout(write=True)\n        self.co.close()\n\n    def setup(self, num_samples, num_metadata):\n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n        arr = np.array([0,], dtype=np.uint8)\n        try:\n            aset = self.co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts='10')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend='10')\n    \n        with aset as cm_aset:\n            for i in range(num_samples):\n                arr[:] = i % 255\n                cm_aset[i] = arr\n        with self.co.metadata as cm_meta:\n            for i in range(num_metadata):\n                cm_meta[i] = f'{i % 500} data'\n        self.co.commit('first')\n        self.co.close()\n        self.co = None",
+        "min_run_count": 2,
+        "name": "commit_and_checkout.CheckoutCommit.time_checkout_write_enabled",
+        "number": 1,
+        "param_names": [
+            "num_samples",
+            "num_metadata"
+        ],
+        "params": [
+            [
+                "5000",
+                "20000"
+            ],
+            [
+                "5000",
+                "20000"
+            ]
+        ],
+        "processes": 2,
+        "repeat": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "c53d947a9bcc39438968da0849dfbe572ca93623af710b5ead8f9a838bd0b55f",
+        "warmup_time": 0
+    },
+    "commit_and_checkout.MakeCommit.time_commit": {
+        "code": "class MakeCommit:\n    def time_commit(self, num_samples, num_metadata):\n        self.co.commit('hello')\n\n    def setup(self, num_samples, num_metadata):\n        self.tmpdir = mkdtemp()\n        self.repo = Repository(path=self.tmpdir, exists=False)\n        self.repo.init('tester', 'foo@test.bar', remove_old=True)\n        self.co = self.repo.checkout(write=True)\n        arr = np.array([0,], dtype=np.uint8)\n        try:\n            aset = self.co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend_opts='10')\n        except TypeError:\n            aset = self.co.arraysets.init_arrayset(\n                'aset', prototype=arr, backend='10')\n    \n        with aset as cm_aset:\n            for i in range(num_samples):\n                arr[:] = i % 255\n                cm_aset[i] = arr\n        with self.co.metadata as cm_meta:\n            for i in range(num_metadata):\n                cm_meta[i] = f'{i % 500} data'",
+        "min_run_count": 2,
+        "name": "commit_and_checkout.MakeCommit.time_commit",
+        "number": 1,
+        "param_names": [
+            "num_samples",
+            "num_metadata"
+        ],
+        "params": [
+            [
+                "5000",
+                "20000"
+            ],
+            [
+                "5000",
+                "20000"
+            ]
+        ],
+        "processes": 2,
+        "repeat": 2,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "6cbe179c79ba97750da0479f1d6151a9f40ee9f3df51ab8c30feacf93d14c500",
+        "warmup_time": 0
+    },
+    "package.TimeImport.time_import": {
+        "code": "class TimeImport:\n    def time_import(self):\n        if sys.version_info >= (3, 7):\n            # on py37+ we the \"-X importtime\" usage gives us a more precise\n            #  measurement of the import time we actually care about,\n            #  without the subprocess or interpreter overhead\n            cmd = [sys.executable, \"-X\", \"importtime\", \"-c\", \"import hangar\"]\n            p = subprocess.run(cmd, stderr=subprocess.PIPE)\n    \n            line = p.stderr.splitlines()[-1]\n            field = line.split(b\"|\")[-2].strip()\n            total = int(field)  # microseconds\n            return total\n    \n        cmd = [sys.executable, \"-c\", \"import hangar\"]\n        subprocess.run(cmd, stderr=subprocess.PIPE)",
+        "min_run_count": 2,
+        "name": "package.TimeImport.time_import",
+        "number": 0,
+        "param_names": [],
+        "params": [],
+        "processes": 2,
+        "repeat": 0,
+        "sample_time": 0.01,
+        "timeout": 60.0,
+        "type": "time",
+        "unit": "seconds",
+        "version": "90bda1fe84972e4410749764c4df623d8858bfa92ada6507e859fc13cb08f894",
+        "warmup_time": -1
+    },
+    "version": 2
+}
