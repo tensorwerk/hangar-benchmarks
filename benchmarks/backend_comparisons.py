@@ -14,8 +14,8 @@ class _WriterSuite:
 
     params = ['hdf5_00', 'hdf5_01', 'numpy_10']
     param_names = ['backend']
-    processes = 4
-    repeat = (3, 4, 40.0)
+    processes = 2
+    repeat = (3, 3, 40.0)
     # repeat == tuple (min_repeat, max_repeat, max_time)
     number = 1
     warmup_time = 0
@@ -50,9 +50,12 @@ class _WriterSuite:
             aset = self.co.arraysets.init_arrayset(
                 'aset', prototype=arr, backend_opts=self.backend_code[backend])
         except TypeError:
-            aset = self.co.arraysets.init_arrayset(
-                'aset', prototype=arr, backend=self.backend_code[backend])
-        except (ValueError, KeyError):
+            try:
+                aset = self.co.arraysets.init_arrayset(
+                    'aset', prototype=arr, backend=self.backend_code[backend])
+            except ValueError:
+                raise NotImplementedError
+        except ValueError:
             raise NotImplementedError
 
         if self.method == 'read':
